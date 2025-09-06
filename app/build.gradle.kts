@@ -41,6 +41,10 @@ android {
     }
 }
 
+configurations.implementation{
+    exclude(group = "com.intellij", module = "annotations")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
