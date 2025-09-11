@@ -44,7 +44,7 @@ class WordsDaoTest {
         wordsDao.insertWord(name)
 
         val latch = CountDownLatch(1)
-        val job = async(Dispatchers.IO){
+        val job = async(Dispatchers.IO) {
             wordsDao.getAllWords().collect {
                 assert(it.contains(name))
                 latch.countDown()
@@ -53,4 +53,54 @@ class WordsDaoTest {
         latch.await()
         job.cancelAndJoin()
     }
+
+    @Test
+    fun getAllWords_returnsTrue() = runBlocking {
+        val potato = Word(id = 2, "Potato")
+        val carrot = Word(id = 3, "Carrot")
+        val broccoli = Word(id = 4, "Broccoli")
+        wordsDao.insertWord(carrot)
+        wordsDao.insertWord(potato)
+        wordsDao.insertWord(broccoli)
+
+        val latch = CountDownLatch(1)
+        val job = async(Dispatchers.IO) {
+            wordsDao.getAllWords().collect {
+                assert(it.size == 3)
+                latch.countDown()
+            }
+        }
+        latch.await()
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun getWordByName_returnsTrue() = runBlocking {
+        val goku = Word(id = 5, "Goku")
+        wordsDao.insertWord(goku)
+
+        assert(wordsDao.getWordByName("Goku") == goku)
+    }
+
+    @Test
+    fun delete_returnsTrue() = runBlocking {
+        val fork = Word(id = 6, "Fork")
+        val knife = Word(id = 7, "Knife")
+        wordsDao.insertWord(fork)
+        wordsDao.insertWord(knife)
+
+        wordsDao.delete()
+
+        val latch = CountDownLatch(1)
+        val job = async(Dispatchers.IO){
+            wordsDao.getAllWords().collect {
+                assert(!it.contains(fork))
+                latch.countDown()
+            }
+        }
+        latch.await()
+        job.cancelAndJoin()
+    }
 }
+
+

@@ -13,8 +13,11 @@ interface WordsDao {
     @Query("SELECT * FROM `word`")
     fun getAllWords(): Flow<List<Word>>
 
-    @Query("SELECT * FROM `word` where id = :wordId")
-    suspend fun getOneWord(wordId: Int): Word
+    @Query("SELECT * FROM `word` where id = :id")
+    suspend fun getWord(id: Int): Word
+
+    @Query("SELECT * FROM `word` where name = :name")
+    suspend fun getWordByName(name: String): Word
 
     @Query("DELETE FROM word")
     suspend fun delete()
