@@ -101,6 +101,16 @@ class WordsDaoTest {
         latch.await()
         job.cancelAndJoin()
     }
+
+    @Test
+    fun update_returnsTrue() = runBlocking {
+        val music = Word(id = 8, "Rock")
+        wordsDao.insertWord(music)
+        val updateMusic = Word(id = 8, "Pop")
+        wordsDao.updateWord(updateMusic)
+
+        assert(wordsDao.getWordByName("Pop") == updateMusic)
+    }
 }
 
 
