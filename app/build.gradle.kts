@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -45,6 +46,9 @@ android {
     buildFeatures {
         compose = true
     }
+    hilt {
+        enableAggregatingTask = false
+    }
 }
 
 configurations.implementation{
@@ -67,6 +71,10 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // DAGGER-HILT
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     // Tests
     testImplementation(libs.junit)
