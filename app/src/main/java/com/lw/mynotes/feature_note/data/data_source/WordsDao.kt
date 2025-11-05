@@ -7,6 +7,7 @@ import androidx.room.Update
 import com.lw.mynotes.feature_note.domain.model.Word
 import kotlinx.coroutines.flow.Flow
 
+// For test porpoises only
 @Dao
 interface WordsDao {
 
