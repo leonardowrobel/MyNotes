@@ -12,8 +12,9 @@ data class Note(
     val createdAt: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "updated_at")
     val updatedAt: Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "deleted_at")
-    val deletedAt: Long? = null,
+    // TODO: implement soft delete
+//    @ColumnInfo(name = "deleted_at")
+//    val deletedAt: Long? = null,
     val title: String,
     val content: String,
 )

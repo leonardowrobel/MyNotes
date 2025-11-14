@@ -1,5 +1,6 @@
 package com.lw.mynotes
 
+import android.util.Log
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,13 +16,19 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.CountDownLatch
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class NotesDaoTest {
+
+    companion object {
+        const val TAG = "NOTES_DAO_TEST"
+    }
     private lateinit var database: MyNotesDatabase
     private lateinit var notesDao: NotesDao
+    private lateinit var dateFormat: SimpleDateFormat
 
     @Before
     fun setupDatabase(){
@@ -33,24 +40,44 @@ class NotesDaoTest {
         notesDao = database.notesDao()
     }
 
+    @Before
+    fun setup(){
+        dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+    }
+
     @After
     fun closeDatabase(){
         database.close()
     }
 
     @Test
-    fun insertWord_returnsTrue() = runBlocking {
+    fun insertNote_returnsTrue() = runBlocking {
         val noteA = Note(title = "Note A", content = "This is the note's content")
         notesDao.insertNote(noteA)
 
-        val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            notesDao.getAllNotes().collect {
+            notesDao.getAllNotes().let {
+                val note = it[0]
+                Log.d(TAG, note.toString())
+                Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
                 assert(it.contains(noteA))
-                latch.countDown()
             }
         }
-        latch.await()
         job.cancelAndJoin()
+    }
+
+    @Test
+    fun updateNote_returnsTrue() = runBlocking {
+        val noteB = Note(title = "Note B", content = "This is an unchanged content.")
+        var updatedNote = Note(title = "", content = "")
+        notesDao.insertNote(noteB)
+        notesDao.getAllNotes().let {
+            updatedNote = it[0].copy(title = "Updated note B", content = "This is the new changed content.")
+        }
+        notesDao.updateNote(updatedNote)
+        notesDao.getAllNotes().let {
+            Log.d(TAG, it[0].toString())
+            assert(it[0].content == updatedNote.content)
+        }
     }
 }
