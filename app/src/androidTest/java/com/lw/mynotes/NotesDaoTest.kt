@@ -42,7 +42,7 @@ class NotesDaoTest {
 
     @Before
     fun setup(){
-        dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+        dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:SSS")
     }
 
     @After
@@ -55,15 +55,12 @@ class NotesDaoTest {
         val noteA = Note(title = "Note A", content = "This is the note's content")
         notesDao.insertNote(noteA)
 
-        val job = async(Dispatchers.IO) {
-            notesDao.getAllNotes().let {
-                val note = it[0]
-                Log.d(TAG, note.toString())
-                Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
-                assert(it.contains(noteA))
-            }
+        notesDao.getAllNotes().let {
+            val note = it[0]
+            Log.d(TAG, note.toString())
+            Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
+            assert(it.contains(noteA))
         }
-        job.cancelAndJoin()
     }
 
     @Test
@@ -74,6 +71,19 @@ class NotesDaoTest {
         notesDao.getAllNotes().let {
             updatedNote = it[0].copy(title = "Updated note B", content = "This is the new changed content.")
         }
+        notesDao.updateNote(updatedNote)
+        notesDao.getAllNotes().let {
+            Log.d(TAG, it[0].toString())
+            assert(it[0].content == updatedNote.content)
+        }
+    }
+
+    @Test
+    fun updateNoteUsingId_returnsTrue() = runBlocking {
+        val noteC = Note(title = "Note C", content = "This is an unchanged content.")
+        val noteCId = notesDao.insertNote(noteC)
+        val updatedNote = Note(id = noteCId, title = "Updated note C", content = "This is the new changed content.")
+
         notesDao.updateNote(updatedNote)
         notesDao.getAllNotes().let {
             Log.d(TAG, it[0].toString())

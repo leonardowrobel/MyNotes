@@ -11,7 +11,7 @@ import com.lw.mynotes.feature_note.domain.model.Note
 @Dao
 interface NotesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: Note)
+    suspend fun insertNote(note: Note): Long
 
     @Query("SELECT * FROM notes")
     suspend fun getAllNotes(): List<Note>
