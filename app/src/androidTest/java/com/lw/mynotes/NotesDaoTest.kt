@@ -53,7 +53,7 @@ class NotesDaoTest {
     @Test
     fun insertNote_returnsTrue() = runBlocking {
         val noteA = Note(title = "Note A", content = "This is the note's content")
-        notesDao.insertNote(noteA)
+        notesDao.insert(noteA)
 
         notesDao.getAllNotes().let {
             val note = it[0]
@@ -67,7 +67,7 @@ class NotesDaoTest {
     fun updateNote_returnsTrue() = runBlocking {
         val noteB = Note(title = "Note B", content = "This is an unchanged content.")
         var updatedNote = Note(title = "", content = "")
-        notesDao.insertNote(noteB)
+        notesDao.insert(noteB)
         notesDao.getAllNotes().let {
             updatedNote = it[0].copy(title = "Updated note B", content = "This is the new changed content.")
         }
@@ -81,7 +81,7 @@ class NotesDaoTest {
     @Test
     fun updateNoteUsingId_returnsTrue() = runBlocking {
         val noteC = Note(title = "Note C", content = "This is an unchanged content.")
-        val noteCId = notesDao.insertNote(noteC)
+        val noteCId = notesDao.insert(noteC)
         val updatedNote = Note(id = noteCId, title = "Updated note C", content = "This is the new changed content.")
 
         notesDao.updateNote(updatedNote)

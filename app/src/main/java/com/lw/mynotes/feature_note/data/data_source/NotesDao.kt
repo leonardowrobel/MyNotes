@@ -9,9 +9,9 @@ import androidx.room.Update
 import com.lw.mynotes.feature_note.domain.model.Note
 
 @Dao
-interface NotesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(note: Note): Long
+interface NotesDao: BaseDAO<Note> {
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertNote(note: Note): Long
 
     @Query("SELECT * FROM notes")
     suspend fun getAllNotes(): List<Note>
