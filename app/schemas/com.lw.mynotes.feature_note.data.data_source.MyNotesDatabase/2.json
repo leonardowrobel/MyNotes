@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d93766b355767f401192d6fdafd6e2a6",
+    "identityHash": "6102e4c48a31a2322881dd58a41725ea",
     "entities": [
       {
         "tableName": "Word",
@@ -29,7 +29,7 @@
       },
       {
         "tableName": "notes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `deleted_at` INTEGER, `title` TEXT NOT NULL, `content` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -48,6 +48,11 @@
             "columnName": "updated_at",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "deletedAt",
+            "columnName": "deleted_at",
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "title",
@@ -72,7 +77,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd93766b355767f401192d6fdafd6e2a6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6102e4c48a31a2322881dd58a41725ea')"
     ]
   }
 }

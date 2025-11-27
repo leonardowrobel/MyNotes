@@ -50,6 +50,7 @@ class NotesDaoTest {
         database.close()
     }
 
+    // FIX-ME
     @Test
     fun insertNote_returnsTrue() = runBlocking {
         val noteA = Note(title = "Note A", content = "This is the note's content")
@@ -60,6 +61,23 @@ class NotesDaoTest {
             Log.d(TAG, note.toString())
             Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
             assert(it.contains(noteA))
+        }
+    }
+
+    // FIX-ME
+    @Test
+    fun insertNotes_returnsTrue() = runBlocking {
+        val noteA = Note(title = "Note A", content = "This is the note's content")
+        val noteB = Note(title = "Note B", content = "This is another note's content")
+        val noteC = Note(title = "Note C", content = "Yet another note's content")
+
+        notesDao.insert(listOf<Note>(noteA, noteB, noteC))
+
+        notesDao.getAllNotes().let {
+            val note = it[0]
+            Log.d(TAG, note.toString())
+            Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
+            assert(it.contains(noteB))
         }
     }
 
