@@ -50,34 +50,34 @@ class NotesDaoTest {
         database.close()
     }
 
-    // FIX-ME
     @Test
     fun insertNote_returnsTrue() = runBlocking {
-        val noteA = Note(title = "Note A", content = "This is the note's content")
-        notesDao.insert(noteA)
+        val firstNoteToInset = Note(title = "Note A", content = "This is the note's content")
+        val idFromDB = notesDao.insert(firstNoteToInset)
+        val firstNoteToInsetWithId = firstNoteToInset.copy(id = idFromDB)
 
         notesDao.getAllNotes().let {
             val note = it[0]
             Log.d(TAG, note.toString())
             Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
-            assert(it.contains(noteA))
+            assert(it.contains(firstNoteToInsetWithId))
         }
     }
 
-    // FIX-ME
     @Test
     fun insertNotes_returnsTrue() = runBlocking {
         val noteA = Note(title = "Note A", content = "This is the note's content")
         val noteB = Note(title = "Note B", content = "This is another note's content")
         val noteC = Note(title = "Note C", content = "Yet another note's content")
 
-        notesDao.insert(listOf<Note>(noteA, noteB, noteC))
+        val listOfIds = notesDao.insert(listOf(noteA, noteB, noteC))
+        val noteBWithId = noteB.copy(id = listOfIds[1])
 
         notesDao.getAllNotes().let {
             val note = it[0]
             Log.d(TAG, note.toString())
             Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
-            assert(it.contains(noteB))
+            assert(it.contains(noteBWithId))
         }
     }
 
