@@ -12,8 +12,8 @@ interface BaseDAO<T> {
     @Insert
     fun insert(entities: List<T>): List<Long>
 
-    @Update
-    fun update(entity: T)
+//    @Update
+//    fun update(entity: T)
 
 //    @Update
 //    fun update(entities: List<T>)

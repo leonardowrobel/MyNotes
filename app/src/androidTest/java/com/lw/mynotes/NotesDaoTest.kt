@@ -8,9 +8,6 @@ import androidx.test.filters.SmallTest
 import com.lw.mynotes.feature_note.data.data_source.MyNotesDatabase
 import com.lw.mynotes.feature_note.data.data_source.NotesDao
 import com.lw.mynotes.feature_note.domain.model.Note
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -56,7 +53,7 @@ class NotesDaoTest {
         val idFromDB = notesDao.insert(firstNoteToInset)
         val firstNoteToInsetWithId = firstNoteToInset.copy(id = idFromDB)
 
-        notesDao.getAllNotes().let {
+        notesDao.getAll().let {
             val note = it[0]
             Log.d(TAG, note.toString())
             Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
@@ -73,7 +70,7 @@ class NotesDaoTest {
         val listOfIds = notesDao.insert(listOf(noteA, noteB, noteC))
         val noteBWithId = noteB.copy(id = listOfIds[1])
 
-        notesDao.getAllNotes().let {
+        notesDao.getAll().let {
             val note = it[0]
             Log.d(TAG, note.toString())
             Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
@@ -86,11 +83,11 @@ class NotesDaoTest {
         val noteB = Note(title = "Note B", content = "This is an unchanged content.")
         var updatedNote = Note(title = "", content = "")
         notesDao.insert(noteB)
-        notesDao.getAllNotes().let {
+        notesDao.getAll().let {
             updatedNote = it[0].copy(title = "Updated note B", content = "This is the new changed content.")
         }
-        notesDao.updateNote(updatedNote)
-        notesDao.getAllNotes().let {
+        notesDao.update(updatedNote)
+        notesDao.getAll().let {
             Log.d(TAG, it[0].toString())
             assert(it[0].content == updatedNote.content)
         }
@@ -102,8 +99,8 @@ class NotesDaoTest {
         val noteCId = notesDao.insert(noteC)
         val updatedNote = Note(id = noteCId, title = "Updated note C", content = "This is the new changed content.")
 
-        notesDao.updateNote(updatedNote)
-        notesDao.getAllNotes().let {
+        notesDao.update(updatedNote)
+        notesDao.getAll().let {
             Log.d(TAG, it[0].toString())
             assert(it[0].content == updatedNote.content)
         }
