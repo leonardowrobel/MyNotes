@@ -76,14 +76,17 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    // Tests
+    // TESTS [GENERAL]
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.google.truth)
     androidTestImplementation(libs.android.arch.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    // TODO: review this
+    // [DAGGER-HILT]
+//    androidTestImplementation(libs.hilt)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
