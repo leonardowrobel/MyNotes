@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+// TODO: Remove this
 // For test porpoises only
 @Entity
 data class Word(

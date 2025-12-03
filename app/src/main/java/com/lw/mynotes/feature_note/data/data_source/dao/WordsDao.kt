@@ -1,4 +1,4 @@
-package com.lw.mynotes.feature_note.data.data_source
+package com.lw.mynotes.feature_note.data.data_source.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -7,6 +7,7 @@ import androidx.room.Update
 import com.lw.mynotes.feature_note.domain.model.Word
 import kotlinx.coroutines.flow.Flow
 
+// TODO: Remove this
 // For test porpoises only
 @Dao
 interface WordsDao {

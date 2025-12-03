@@ -12,7 +12,7 @@ ksp = "2.0.21-1.0.27"
 room = "2.7.2"
 truth = "1.0.1"
 arch = "1.0.0"
-hilt = "2.57.1"
+hilt = "2.57.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +36,7 @@ google-truth = { group = "com.google.truth", name = "truth", version.ref = "trut
 android-arch-core = { group = "android.arch.core", name = "core-testing", version.ref = "arch" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt"}
+#hilt-android-test = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

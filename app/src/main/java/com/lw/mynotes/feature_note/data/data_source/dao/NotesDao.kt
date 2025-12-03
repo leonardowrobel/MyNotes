@@ -1,4 +1,4 @@
-package com.lw.mynotes.feature_note.data.data_source
+package com.lw.mynotes.feature_note.data.data_source.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

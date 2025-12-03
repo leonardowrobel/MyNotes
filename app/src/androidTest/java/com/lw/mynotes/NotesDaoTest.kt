@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.lw.mynotes.feature_note.data.data_source.MyNotesDatabase
-import com.lw.mynotes.feature_note.data.data_source.NotesDao
+import com.lw.mynotes.feature_note.data.data_source.dao.NotesDao
 import com.lw.mynotes.feature_note.domain.model.Note
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -34,7 +34,7 @@ class NotesDaoTest {
             MyNotesDatabase::class.java
         ).allowMainThreadQueries().build()
 
-        notesDao = database.notesDao()
+        notesDao = database.notesDao
     }
 
     @Before

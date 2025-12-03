@@ -1,9 +1,7 @@
-package com.lw.mynotes.feature_note.data.data_source
+package com.lw.mynotes.feature_note.data.data_source.dao
 
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import androidx.room.Update
 
 interface BaseDAO<T> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

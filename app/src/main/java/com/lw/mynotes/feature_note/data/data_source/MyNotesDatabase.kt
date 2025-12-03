@@ -2,6 +2,8 @@ package com.lw.mynotes.feature_note.data.data_source
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.lw.mynotes.feature_note.data.data_source.dao.NotesDao
+import com.lw.mynotes.feature_note.data.data_source.dao.WordsDao
 import com.lw.mynotes.feature_note.domain.model.Note
 import com.lw.mynotes.feature_note.domain.model.Word
 
@@ -13,5 +15,9 @@ import com.lw.mynotes.feature_note.domain.model.Word
 abstract class MyNotesDatabase: RoomDatabase() {
 
     abstract fun wordsDao(): WordsDao
-    abstract fun notesDao(): NotesDao
+    abstract val notesDao: NotesDao
+
+    companion object {
+        const val DATABASE_NAME = "my_notes_db"
+    }
 }
