@@ -5,6 +5,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NotesViewModel @Inject constructor(): ViewModel() {
-    val name: String = "String from NotesViewModel"
+class MainNotesViewModel @Inject constructor(): ViewModel() {
+
+    companion object {
+        const val TAG = "MAIN_NOTE_VM"
+    }
 }

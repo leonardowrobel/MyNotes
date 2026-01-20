@@ -4,14 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.lw.mynotes.feature_note.ui.notes.NotesPage
+import androidx.compose.material3.Surface
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.lw.mynotes.feature_note.ui.notes.NotesScreen
 import com.lw.mynotes.ui.theme.MyNotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +18,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyNotesTheme {
-                    NotesPage()
+                Surface {
+                    val navController = rememberNavController()
+//                    NavHost(
+//                        navController = navController,
+//                        startDestination =
+//                    ) { }
+                }
+//                    NotesScreen()
             }
         }
     }
