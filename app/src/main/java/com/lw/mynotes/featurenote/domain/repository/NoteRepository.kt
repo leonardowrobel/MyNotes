@@ -1,6 +1,6 @@
-package com.lw.mynotes.feature_note.domain.repository
+package com.lw.mynotes.featurenote.domain.repository
 
-import com.lw.mynotes.feature_note.domain.model.Note
+import com.lw.mynotes.featurenote.domain.model.Note
 
 interface NoteRepository {
 

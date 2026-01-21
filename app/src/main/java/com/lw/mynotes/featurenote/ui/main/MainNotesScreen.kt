@@ -1,8 +1,9 @@
-package com.lw.mynotes.feature_note.ui.add_edit
+package com.lw.mynotes.featurenote.ui.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,20 +11,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.lw.mynotes.featurenote.ui.util.NavigationItem
 
 @Composable
-fun AddEditNoteViewModel(
-    viewModel: AddEditNoteViewModel = hiltViewModel()
-){
+fun MainNotesScreen(
+    viewModel: MainNotesViewModel = hiltViewModel(),
+    navController: NavController
+) {
     Surface(
-        Modifier.fillMaxSize(), color = Color.Cyan
+        Modifier.fillMaxSize(), color = Color.LightGray
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(AddEditNoteViewModel.TAG)
+            Text(MainNotesViewModel.TAG)
+            Button(onClick = {
+                navController.navigate(NavigationItem.AddEditNote.route)
+            }) {
+                Text("AddEditNoteScreen")
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.lw.mynotes.feature_note.ui.add_edit
+package com.lw.mynotes.featurenote.ui.addedit
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

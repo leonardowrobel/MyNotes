@@ -2,9 +2,9 @@ package com.lw.mynotes.di
 
 import android.app.Application
 import androidx.room.Room
-import com.lw.mynotes.feature_note.data.data_source.MyNotesDatabase
-import com.lw.mynotes.feature_note.data.repository.NoteRepositoryImpl
-import com.lw.mynotes.feature_note.domain.repository.NoteRepository
+import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
+import com.lw.mynotes.featurenote.data.repository.NoteRepositoryImpl
+import com.lw.mynotes.featurenote.domain.repository.NoteRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

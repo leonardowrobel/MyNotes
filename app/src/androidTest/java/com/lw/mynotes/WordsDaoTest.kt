@@ -4,14 +4,14 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.lw.mynotes.feature_note.data.data_source.MyNotesDatabase
-import com.lw.mynotes.feature_note.data.data_source.dao.WordsDao
+import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
+import com.lw.mynotes.featurenote.data.data_source.dao.WordsDao
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import com.lw.mynotes.feature_note.domain.model.Word
+import com.lw.mynotes.featurenote.domain.model.Word
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
