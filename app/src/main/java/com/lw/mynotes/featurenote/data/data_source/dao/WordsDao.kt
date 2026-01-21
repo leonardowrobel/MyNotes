@@ -1,10 +1,10 @@
-package com.lw.mynotes.feature_note.data.data_source.dao
+package com.lw.mynotes.featurenote.data.data_source.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.lw.mynotes.feature_note.domain.model.Word
+import com.lw.mynotes.featurenote.domain.model.Word
 import kotlinx.coroutines.flow.Flow
 
 // TODO: Remove this

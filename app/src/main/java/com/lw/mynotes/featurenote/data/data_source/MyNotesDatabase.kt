@@ -1,11 +1,11 @@
-package com.lw.mynotes.feature_note.data.data_source
+package com.lw.mynotes.featurenote.data.data_source
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.lw.mynotes.feature_note.data.data_source.dao.NotesDao
-import com.lw.mynotes.feature_note.data.data_source.dao.WordsDao
-import com.lw.mynotes.feature_note.domain.model.Note
-import com.lw.mynotes.feature_note.domain.model.Word
+import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
+import com.lw.mynotes.featurenote.data.data_source.dao.WordsDao
+import com.lw.mynotes.featurenote.domain.model.Note
+import com.lw.mynotes.featurenote.domain.model.Word
 
 
 @Database(

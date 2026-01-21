@@ -13,6 +13,10 @@ room = "2.7.2"
 truth = "1.0.1"
 arch = "1.0.0"
 hilt = "2.57.2"
+hiltNavigation = "1.0.0"
+navVersion = "2.9.6"
+jsonSerialization = "1.7.3"
+kotlinSerialization = "2.0.21"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,16 +36,24 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
 google-truth = { group = "com.google.truth", name = "truth", version.ref = "truth"}
 android-arch-core = { group = "android.arch.core", name = "core-testing", version.ref = "arch" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt"}
 #hilt-android-test = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt"}
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navVersion" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navVersion" }
+androidx-navigation-ndff = { group = "androidx.navigation", name = "navigation-dynamic-features-fragment", version.ref = "navVersion" }
+androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navVersion" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jsonSerialization" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
 

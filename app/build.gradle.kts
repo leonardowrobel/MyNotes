@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -59,8 +60,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -76,6 +75,20 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
+    // COMPOSE
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+
+    // NAVIGATION
+    implementation(libs.androidx.hilt.navigation)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.ndff)
+
+    implementation(libs.kotlinx.serialization.json)
+
+
     // TESTS [GENERAL]
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -85,8 +98,10 @@ dependencies {
     androidTestImplementation(libs.android.arch.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     // TODO: review this
-    // [DAGGER-HILT]
+    // TESTS [DAGGER-HILT]
 //    androidTestImplementation(libs.hilt)
+    // TESTS [NAVIGATION]
+    androidTestImplementation(libs.androidx.navigation.testing)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

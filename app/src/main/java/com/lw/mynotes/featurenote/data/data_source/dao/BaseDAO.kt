@@ -1,4 +1,4 @@
-package com.lw.mynotes.feature_note.data.data_source.dao
+package com.lw.mynotes.featurenote.data.data_source.dao
 
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
