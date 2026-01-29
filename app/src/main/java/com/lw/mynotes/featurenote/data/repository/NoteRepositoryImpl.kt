@@ -1,7 +1,7 @@
 package com.lw.mynotes.featurenote.data.repository
 
 import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
-import com.lw.mynotes.featurenote.domain.model.Note
+import com.lw.mynotes.featurenote.data.model.Note
 import com.lw.mynotes.featurenote.domain.repository.NoteRepository
 
 class NoteRepositoryImpl(private val dao: NotesDao): NoteRepository {

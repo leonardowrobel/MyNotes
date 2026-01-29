@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Update
-import com.lw.mynotes.featurenote.domain.model.Note
+import com.lw.mynotes.featurenote.data.model.Note
 
 @Dao
 interface NotesDao: BaseDAO<Note> {
