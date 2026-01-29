@@ -4,6 +4,11 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+// TODO: create state
+//data class AddEditNoteState(
+//
+//)
+
 @HiltViewModel
 class AddEditNoteViewModel @Inject constructor(): ViewModel() {
 
