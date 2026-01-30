@@ -4,19 +4,19 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Update
-import com.lw.mynotes.featurenote.data.model.Note
+import com.lw.mynotes.featurenote.data.model.NoteEntity
 
 @Dao
-interface NotesDao: BaseDAO<Note> {
+interface NotesDao: BaseDAO<NoteEntity> {
     @Query("SELECT * FROM notes")
-    suspend fun getAll(): List<Note>
+    suspend fun getAll(): List<NoteEntity>
 
     @Query("SELECT * FROM notes WHERE id = :id")
-    suspend fun get(id: Long): Note
+    suspend fun get(id: Long): NoteEntity
 
     @Update
-    suspend fun update(note: Note)
+    suspend fun update(note: NoteEntity)
 
     @Delete
-    suspend fun delete(vararg notes: Note)
+    suspend fun delete(vararg notes: NoteEntity)
 }
