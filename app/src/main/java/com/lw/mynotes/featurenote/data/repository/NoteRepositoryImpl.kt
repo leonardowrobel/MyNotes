@@ -3,8 +3,11 @@ package com.lw.mynotes.featurenote.data.repository
 import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 import com.lw.mynotes.featurenote.domain.repository.NoteRepository
+import javax.inject.Inject
 
-class NoteRepositoryImpl(private val dao: NotesDao): NoteRepository {
+class NoteRepositoryImpl @Inject constructor(
+    private val dao: NotesDao
+): NoteRepository {
     override suspend fun getAll(): List<NoteEntity> {
         return dao.getAll()
     }
@@ -13,8 +16,8 @@ class NoteRepositoryImpl(private val dao: NotesDao): NoteRepository {
         return dao.get(id)
     }
 
-    override suspend fun insert(note: NoteEntity) {
-        dao.insert(note)
+    override suspend fun insert(note: NoteEntity): Long {
+        return dao.insert(note)
     }
 
     override suspend fun update(note: NoteEntity) {

@@ -1,10 +1,10 @@
 package com.lw.mynotes.featurenote.domain.model
 
 data class Note(
-    val id: Long,
+    val id: Long = 0,
     val title: String,
     val content: String,
-    val createdAt: Long,
-    val updatedAt: Long,
-    val deletedAt: Long
+    val createdAt: Long = System.currentTimeMillis(),
+    val updatedAt: Long = System.currentTimeMillis(),
+    val deletedAt: Long? = null
 )
