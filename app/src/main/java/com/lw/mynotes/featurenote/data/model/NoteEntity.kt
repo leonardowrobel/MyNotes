@@ -30,7 +30,8 @@ data class NoteEntity(
                 note.deletedAt)
         }
     }
+
     fun toNote(): Note {
-        return Note(id, title, content, createdAt, updatedAt, deletedAt!!)
+        return Note(id, title, content, createdAt, updatedAt, deletedAt)
     }
 }
