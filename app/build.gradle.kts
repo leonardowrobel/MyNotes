@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lw.mynotes"
-        minSdk = 26
+        minSdk = 34
         targetSdk = 35
 
         versionCode = 1

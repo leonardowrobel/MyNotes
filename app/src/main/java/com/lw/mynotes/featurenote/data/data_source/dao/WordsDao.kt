@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.lw.mynotes.featurenote.domain.model.Word
+import com.lw.mynotes.featurenote.data.model.Word
 import kotlinx.coroutines.flow.Flow
 
 // TODO: Remove this

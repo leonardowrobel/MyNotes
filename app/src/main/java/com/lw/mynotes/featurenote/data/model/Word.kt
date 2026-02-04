@@ -1,4 +1,4 @@
-package com.lw.mynotes.featurenote.domain.model
+package com.lw.mynotes.featurenote.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

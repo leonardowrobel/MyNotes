@@ -4,12 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
 import com.lw.mynotes.featurenote.data.data_source.dao.WordsDao
-import com.lw.mynotes.featurenote.domain.model.Note
-import com.lw.mynotes.featurenote.domain.model.Word
+import com.lw.mynotes.featurenote.data.model.NoteEntity
+import com.lw.mynotes.featurenote.data.model.Word
 
 
 @Database(
-    entities = [Word::class, Note::class],
+    entities = [Word::class, NoteEntity::class],
     version = 2
 )
 abstract class MyNotesDatabase: RoomDatabase() {
