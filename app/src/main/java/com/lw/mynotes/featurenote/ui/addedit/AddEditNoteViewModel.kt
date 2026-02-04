@@ -6,13 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.services.NotesService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class AddEditNoteUiState(
@@ -24,7 +22,8 @@ data class AddEditNoteUiState(
 
 @HiltViewModel
 class AddEditNoteViewModel @Inject constructor(
-    val notesService: NotesService
+    val notesService: NotesService,
+//    private val  navController: NavController
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(AddEditNoteUiState())
@@ -41,8 +40,8 @@ class AddEditNoteViewModel @Inject constructor(
     fun create(){
         Log.d(TAG, "create()")
         viewModelScope.launch {
-
             notesService.createNote(_uiState.value.title, _uiState.value.content)
+            // TODO: go back to main page
         }
     }
 
