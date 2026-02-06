@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import com.lw.mynotes.featurenote.ui.components.Fab
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 import androidx.compose.runtime.collectAsState
+import com.lw.mynotes.featurenote.ui.components.NoteCard
 
 @Composable
 fun MainNotesScreen (
@@ -45,8 +46,7 @@ fun MainNotesScreen (
                 Spacer(modifier = Modifier.height(12.dp))
                 if(viewModel.uiState.collectAsState().value.notes.isNotEmpty()){
                     for(note in viewModel.uiState.collectAsState().value.notes){
-                        Text(note.title)
-                        Text(note.content)
+                        NoteCard(note)
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 } else {
