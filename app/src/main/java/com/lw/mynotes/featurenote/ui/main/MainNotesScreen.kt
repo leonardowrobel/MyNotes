@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,25 +30,26 @@ fun MainNotesScreen (
     viewModel: MainNotesViewModel = hiltViewModel(),
     navController: NavController
 ) {
-
     LaunchedEffect(Unit) {
         viewModel.getNotes()
     }
 
     Surface(
-        Modifier.fillMaxSize(), color = Color.LightGray
+        Modifier.fillMaxSize(), color = Color.White
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
         ){
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .padding(horizontal = 14.dp, vertical = 18.dp),
             ) {
-                Text(MainNotesViewModel.TAG)
                 Spacer(modifier = Modifier.height(12.dp))
                 if(viewModel.uiState.collectAsState().value.notes.isNotEmpty()){
                     for(note in viewModel.uiState.collectAsState().value.notes){
-                        NoteCard(note)
+                        NoteCard(note = note, onClickEdit = { }, onClickExclude = {})
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 } else {
