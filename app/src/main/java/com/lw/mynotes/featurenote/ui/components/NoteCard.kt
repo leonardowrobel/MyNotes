@@ -33,7 +33,11 @@ fun NoteCard(
             .padding(10.dp, 8.dp)
     ) {
         Row {
-            Text(modifier = Modifier.weight(10f), text = note.title, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = note.title,
+                modifier = Modifier.weight(10f),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold)
             IconButton(
                 modifier = Modifier.weight(1f),
                 onClick = onClickEdit

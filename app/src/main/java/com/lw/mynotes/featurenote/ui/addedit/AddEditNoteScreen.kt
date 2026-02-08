@@ -1,9 +1,10 @@
 package com.lw.mynotes.featurenote.ui.addedit
 
-import androidx.compose.foundation.layout.Arrangement
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -15,7 +16,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
@@ -24,31 +28,63 @@ fun AddEditNoteScreen(
     viewModel: AddEditNoteViewModel = hiltViewModel(),
     navController: NavController
 ){
+    val masTitleChar = 75
+    val masContentChar = 500
+    val mContext = LocalContext.current
+
     val state by viewModel.uiState.collectAsState()
 
     Surface(
-        Modifier.fillMaxSize(), color = Color.Cyan
+        Modifier.fillMaxSize(), color = Color.White
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(12.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 14.dp, vertical = 18.dp)
         ) {
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(if(state.id == null) "Criar nota" else "Editar nota")
-            Spacer(modifier = Modifier.size(8.dp))
-            OutlinedTextField(
-                value = state.title,
-                onValueChange = { viewModel.onTitleChanged(it) },
-                label = { Text("Título") }
+            Spacer(modifier = Modifier.size(12.dp))
+            Text(
+                text = if(state.id == null) "Criar nota" else "Editar nota",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.size(8.dp))
             OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = state.title,
+                onValueChange = {
+                    if(it.length <= masTitleChar){
+                        viewModel.onTitleChanged(it)
+                    } else {
+                        Toast.makeText(
+                            mContext,
+                            "Máximo de caracteres atingido!",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                },
+                label = { Text("Título") },
+                maxLines = 2
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth().weight(1f),
                 value = state.content,
-                onValueChange = { viewModel.onContentChanged(it) },
+                onValueChange = {
+                    if(it.length <= masContentChar) {
+                        viewModel.onContentChanged(it)
+                    } else {
+                        Toast.makeText(
+                            mContext,
+                            "Máximo de caracteres atingido!",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                },
                 label = { Text("Conteúdo") }
             )
             Spacer(modifier = Modifier.size(8.dp))
-            Button(onClick = {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
                 if(state.id == null) viewModel.create() else viewModel.edit()
             }) {
                 Text(if(state.id == null) "Criar" else "Editar")

@@ -1,6 +1,7 @@
 package com.lw.mynotes.featurenote.ui.addedit
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lw.mynotes.featurenote.domain.model.Note
@@ -37,12 +38,18 @@ class AddEditNoteViewModel @Inject constructor(
         _uiState.update { it.copy(content = newContent) }
     }
 
+    fun clearData(){
+        _uiState.update { AddEditNoteUiState() }
+    }
+
     fun create(){
         Log.d(TAG, "create()")
         viewModelScope.launch {
             notesService.createNote(_uiState.value.title, _uiState.value.content)
+            // TODO: toast presenting message for successfully note creation
             // TODO: go back to main page
         }
+        clearData()
     }
 
     fun edit(){
