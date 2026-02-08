@@ -14,11 +14,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+enum class ErrorType {
+    NO_ERROR,
+    MAX_TITLE_CHARACTER_REACHED,
+    MAX_CONTENT_CHARACTER_REACHED,
+}
+
 data class AddEditNoteUiState(
     val note: Note? = null,
     val id: Long? = null,
     val title: String = "",
-    val content: String = ""
+    val content: String = "",
+    val errorType: ErrorType = ErrorType.NO_ERROR,
+    val errorMessage: String = "",
+    val message: String = ""
 )
 
 @HiltViewModel
@@ -42,11 +51,23 @@ class AddEditNoteViewModel @Inject constructor(
         _uiState.update { AddEditNoteUiState() }
     }
 
+    fun onError(type: ErrorType, msg: String){
+        _uiState.update { it.copy(errorType = type, errorMessage = msg) }
+    }
+
+    fun clearError(){
+        _uiState.update { it.copy(errorType = ErrorType.NO_ERROR, errorMessage = "") }
+    }
+
+    fun clearMessage(){
+        _uiState.update { it.copy(message = "") }
+    }
+
     fun create(){
         Log.d(TAG, "create()")
         viewModelScope.launch {
             notesService.createNote(_uiState.value.title, _uiState.value.content)
-            // TODO: toast presenting message for successfully note creation
+            _uiState.update { it.copy(message = "Criação de nota concluída.") }
             // TODO: go back to main page
         }
         clearData()

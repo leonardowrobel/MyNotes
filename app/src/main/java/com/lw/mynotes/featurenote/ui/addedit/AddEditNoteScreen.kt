@@ -34,6 +34,24 @@ fun AddEditNoteScreen(
 
     val state by viewModel.uiState.collectAsState()
 
+    if(state.errorType != ErrorType.NO_ERROR){
+        Toast.makeText(
+            mContext,
+            state.errorMessage,
+            Toast.LENGTH_SHORT
+        ).show()
+        viewModel.clearError()
+    }
+
+    if(state.message.isNotEmpty()){
+        Toast.makeText(
+            mContext,
+            state.message,
+            Toast.LENGTH_SHORT
+        ).show()
+        viewModel.clearMessage()
+    }
+
     Surface(
         Modifier.fillMaxSize(), color = Color.White
     ) {
@@ -56,10 +74,10 @@ fun AddEditNoteScreen(
                     if(it.length <= masTitleChar){
                         viewModel.onTitleChanged(it)
                     } else {
-                        Toast.makeText(
-                            mContext,
-                            "Máximo de caracteres atingido!",
-                            Toast.LENGTH_SHORT).show()
+                        viewModel.onError(
+                            ErrorType.MAX_TITLE_CHARACTER_REACHED,
+                            "Máximo de caracteres atingido!"
+                        )
                     }
                 },
                 label = { Text("Título") },
@@ -73,10 +91,10 @@ fun AddEditNoteScreen(
                     if(it.length <= masContentChar) {
                         viewModel.onContentChanged(it)
                     } else {
-                        Toast.makeText(
-                            mContext,
-                            "Máximo de caracteres atingido!",
-                            Toast.LENGTH_SHORT).show()
+                        viewModel.onError(
+                            ErrorType.MAX_CONTENT_CHARACTER_REACHED,
+                            "Máximo de caracteres atingido!"
+                        )
                     }
                 },
                 label = { Text("Conteúdo") }
