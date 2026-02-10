@@ -17,6 +17,8 @@ hiltNavigation = "1.0.0"
 navVersion = "2.9.6"
 jsonSerialization = "1.7.3"
 kotlinSerialization = "2.0.21"
+gms = "4.4.4"
+bom = "34.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +40,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
 google-truth = { group = "com.google.truth", name = "truth", version.ref = "truth"}
+google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "bom"}
 android-arch-core = { group = "android.arch.core", name = "core-testing", version.ref = "arch" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt"}
@@ -56,4 +59,5 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
+google-gms = { id = "com.google.gms.google-services", version.ref = "gms"}
 

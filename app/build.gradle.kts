@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.google.gms)
 }
 
 android {
@@ -17,11 +18,11 @@ android {
         targetSdk = 35
 
         versionCode = 1
-        versionName = "0.0.1"
+        versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        //noinspection WrongGradleMethod
+        // noinspection WrongGradleMethod
         ksp {
             arg ("room.schemaLocation", "$projectDir/schemas")
         }
@@ -88,6 +89,8 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    // FIREBASE
+    implementation(platform(libs.google.firebase.bom))
 
     // TESTS [GENERAL]
     testImplementation(libs.junit)
