@@ -19,6 +19,7 @@ jsonSerialization = "1.7.3"
 kotlinSerialization = "2.0.21"
 gms = "4.4.4"
 bom = "34.9.0"
+appDistribution = "5.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,4 +61,5 @@ devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
 google-gms = { id = "com.google.gms.google-services", version.ref = "gms"}
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "appDistribution" }
 

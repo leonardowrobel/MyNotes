@@ -1,5 +1,7 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.devtools.ksp)
@@ -30,6 +32,17 @@ android {
     }
 
     buildTypes {
+        create("development"){
+            initWith(getByName("debug"))
+            isMinifyEnabled = false
+            versionNameSuffix = "-dev"
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "Development version"
+                groups = "dev-qa"
+                serviceCredentialsFile = "$rootDir/my-notes-dev-24774-ea1adae1d3e4.json"
+            }
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
