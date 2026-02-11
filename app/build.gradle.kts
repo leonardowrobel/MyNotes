@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.devtools.ksp)
@@ -30,6 +31,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            //noinspection WrongGradleMethod
+            firebaseAppDistribution {
+                serviceCredentialsFile="$rootDir/my-notes-dev-24774-ea1adae1d3e4.json"
+            }
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
