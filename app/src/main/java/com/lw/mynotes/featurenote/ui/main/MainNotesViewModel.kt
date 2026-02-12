@@ -34,6 +34,10 @@ class MainNotesViewModel @Inject constructor(
         }
     }
 
+    fun editNote(id: Long){
+
+    }
+
     companion object {
         const val TAG = "MAIN_NOTE_VM"
     }

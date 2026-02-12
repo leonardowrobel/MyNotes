@@ -24,12 +24,12 @@ import com.lw.mynotes.featurenote.domain.model.Note
 fun NoteCard(
     note: Note,
     onClickEdit: (() -> Unit),
-    onClickExclude: (() -> Unit)
+    onClickExclude: (() -> Unit)? = null
 ){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.Yellow)
+            .background(color = Color(0xFFFFFF99))
             .padding(10.dp, 8.dp)
     ) {
         Row {
@@ -44,11 +44,13 @@ fun NoteCard(
             ) {
                 Icon(imageVector = Icons.Filled.Edit, contentDescription = "Edit")
             }
-            IconButton(
-                modifier = Modifier.weight(1f),
-                onClick = onClickExclude
-            ) {
-                Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+            if(onClickExclude != null){
+                IconButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onClickExclude
+                ) {
+                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+                }
             }
         }
         Text(
