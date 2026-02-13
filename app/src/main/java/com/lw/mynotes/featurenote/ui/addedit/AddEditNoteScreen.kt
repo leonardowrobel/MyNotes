@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 @Composable
 fun AddEditNoteScreen(
     viewModel: AddEditNoteViewModel = hiltViewModel(),
+    noteId: Long? = null,
     navController: NavController
 ){
     val masTitleChar = 75

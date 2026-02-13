@@ -33,7 +33,6 @@ data class AddEditNoteUiState(
 @HiltViewModel
 class AddEditNoteViewModel @Inject constructor(
     val notesService: NotesService,
-//    private val  navController: NavController
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(AddEditNoteUiState())

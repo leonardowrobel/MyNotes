@@ -32,10 +32,19 @@ fun MainNotesScreen (
 ) {
     LaunchedEffect(Unit) {
         viewModel.getNotes()
+        viewModel.navigationEvents.collect{ navEvent ->
+            when(navEvent) {
+                is NavigationEvent.NavigateToEdit -> {
+                    navController.navigate(NavigationItem.AddEditNote.route + "?id=${navEvent.noteId}") // FIX-ME: goes to blank screen
+                }
+            }
+        }
     }
 
     Surface(
-        Modifier.fillMaxSize().padding(vertical = 24.dp), color = Color.White
+        Modifier
+            .fillMaxSize()
+            .padding(vertical = 24.dp), color = Color.White
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -49,7 +58,7 @@ fun MainNotesScreen (
                 Spacer(modifier = Modifier.height(12.dp))
                 if(viewModel.uiState.collectAsState().value.notes.isNotEmpty()){
                     for(note in viewModel.uiState.collectAsState().value.notes){
-                        NoteCard(note = note, onClickEdit = { })
+                        NoteCard(note = note, onClickEdit = { viewModel.editNote(note.id) })
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 } else {
