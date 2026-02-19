@@ -24,17 +24,14 @@ fun AppNavigationHost(
         composable(NavigationItem.MainNotes.route){
             MainNotesScreen(navController = navController)
         }
-        composable(NavigationItem.AddEditNote.route + "?noteId={id}", arguments = listOf(
+        composable(NavigationItem.AddEditNote.route + "?id={id}", arguments = listOf(
             navArgument("id"){
                 type = NavType.StringType
                 nullable = true
             }
         )){ backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")
-            id?.let { id ->
-                AddEditNoteScreen(navController = navController, noteId = id.toLongOrNull())
-            }
-//            AddEditNoteScreen(navController = navController)
+            AddEditNoteScreen(navController = navController, noteId = id?.toLongOrNull())
         }
     }
 }

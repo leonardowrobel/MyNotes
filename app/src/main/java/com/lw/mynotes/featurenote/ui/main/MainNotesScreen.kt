@@ -35,7 +35,7 @@ fun MainNotesScreen (
         viewModel.navigationEvents.collect{ navEvent ->
             when(navEvent) {
                 is NavigationEvent.NavigateToEdit -> {
-                    navController.navigate(NavigationItem.AddEditNote.route + "?id=${navEvent.noteId}") // FIX-ME: goes to blank screen
+                    navController.navigate(NavigationItem.AddEditNote.route + "?id=${navEvent.noteId}")
                 }
             }
         }

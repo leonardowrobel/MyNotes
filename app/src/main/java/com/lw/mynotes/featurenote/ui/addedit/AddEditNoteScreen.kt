@@ -12,6 +12,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -34,6 +35,12 @@ fun AddEditNoteScreen(
     val mContext = LocalContext.current
 
     val state by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        if(noteId != null){
+            viewModel.loadNote(noteId)
+        }
+    }
 
     if(state.errorType != ErrorType.NO_ERROR){
         Toast.makeText(

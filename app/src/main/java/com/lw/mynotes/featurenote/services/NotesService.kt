@@ -14,6 +14,10 @@ class NotesService @Inject constructor(
           return noteRepository.getAll().stream().map { it.toNote() }.toList()
     }
 
+    suspend fun getById(id: Long): Note? {
+        return noteRepository.get(id)?.toNote()
+    }
+
     suspend fun save(note: Note): Long {
         return noteRepository.insert(NoteEntity.from(note))
     }

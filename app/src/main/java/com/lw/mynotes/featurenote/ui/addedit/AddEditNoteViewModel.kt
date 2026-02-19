@@ -38,6 +38,13 @@ class AddEditNoteViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AddEditNoteUiState())
     val uiState: StateFlow<AddEditNoteUiState> = _uiState.asStateFlow()
 
+    fun loadNote(id: Long){
+        viewModelScope.launch {
+            val note = notesService.getById(id)
+            _uiState.update { it.copy(note = note, title = note!!.title, content = note.content, id = note.id) }
+        }
+    }
+
     fun onTitleChanged(newTitle: String){
         _uiState.update { it.copy(title = newTitle) }
     }
