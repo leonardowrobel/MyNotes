@@ -110,11 +110,10 @@ fun AddEditNoteScreen(
             Spacer(modifier = Modifier.size(8.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                if(state.id == null) viewModel.create() else viewModel.edit()
-            }) {
-                Text(if(state.id == null) "Criar" else "Editar")
-            }
+                enabled = state.status != AddEditNoteUiStatus.PRISTINE,
+                onClick = { if(state.id == null) viewModel.create() else viewModel.edit()}) {
+                    Text(if(state.id == null) "Criar" else "Editar")
+                }
         }
     }
 }

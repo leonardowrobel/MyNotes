@@ -22,6 +22,10 @@ class NotesService @Inject constructor(
         return noteRepository.insert(NoteEntity.from(note))
     }
 
+    suspend fun update(note: Note) {
+        return noteRepository.update(NoteEntity.from(note))
+    }
+
     suspend fun createNote(title: String, content: String){
         withContext(Dispatchers.IO){
             val note = Note(title = title, content = content)

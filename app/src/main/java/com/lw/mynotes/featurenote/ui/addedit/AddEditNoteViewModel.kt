@@ -20,6 +20,11 @@ enum class ErrorType {
     MAX_CONTENT_CHARACTER_REACHED,
 }
 
+enum class AddEditNoteUiStatus {
+    PRISTINE,
+    CHANGED
+}
+
 data class AddEditNoteUiState(
     val note: Note? = null,
     val id: Long? = null,
@@ -27,7 +32,8 @@ data class AddEditNoteUiState(
     val content: String = "",
     val errorType: ErrorType = ErrorType.NO_ERROR,
     val errorMessage: String = "",
-    val message: String = ""
+    val message: String = "",
+    val status: AddEditNoteUiStatus = AddEditNoteUiStatus.PRISTINE
 )
 
 @HiltViewModel
@@ -46,11 +52,11 @@ class AddEditNoteViewModel @Inject constructor(
     }
 
     fun onTitleChanged(newTitle: String){
-        _uiState.update { it.copy(title = newTitle) }
+        _uiState.update { it.copy(title = newTitle, status = AddEditNoteUiStatus.CHANGED) }
     }
 
     fun onContentChanged(newContent: String){
-        _uiState.update { it.copy(content = newContent) }
+        _uiState.update { it.copy(content = newContent, status = AddEditNoteUiStatus.CHANGED) }
     }
 
     fun clearData(){
@@ -81,6 +87,12 @@ class AddEditNoteViewModel @Inject constructor(
 
     fun edit(){
         Log.d(TAG, "edit()")
+        viewModelScope.launch {
+            val noteToUpdate = _uiState.value.note!!.copy(title = _uiState.value.title, content = _uiState.value.content)
+            notesService.update(noteToUpdate)
+            _uiState.update { it.copy(message = "Nota editada!") }
+//            clearData() // TODO: go back to main page
+        }
     }
 
     companion object{
