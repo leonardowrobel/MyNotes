@@ -26,10 +26,14 @@ class NotesService @Inject constructor(
         return noteRepository.update(NoteEntity.from(note))
     }
 
-    suspend fun createNote(title: String, content: String){
+    suspend fun create(title: String, content: String){
         withContext(Dispatchers.IO){
             val note = Note(title = title, content = content)
             save(note)
         }
+    }
+
+    suspend fun delete(note: Note){
+        noteRepository.delete(NoteEntity.from(note))
     }
 }
