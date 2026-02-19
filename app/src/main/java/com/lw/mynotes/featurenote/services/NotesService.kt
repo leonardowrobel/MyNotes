@@ -14,14 +14,26 @@ class NotesService @Inject constructor(
           return noteRepository.getAll().stream().map { it.toNote() }.toList()
     }
 
+    suspend fun getById(id: Long): Note? {
+        return noteRepository.get(id)?.toNote()
+    }
+
     suspend fun save(note: Note): Long {
         return noteRepository.insert(NoteEntity.from(note))
     }
 
-    suspend fun createNote(title: String, content: String){
+    suspend fun update(note: Note) {
+        return noteRepository.update(NoteEntity.from(note))
+    }
+
+    suspend fun create(title: String, content: String){
         withContext(Dispatchers.IO){
             val note = Note(title = title, content = content)
             save(note)
         }
+    }
+
+    suspend fun delete(note: Note){
+        noteRepository.delete(NoteEntity.from(note))
     }
 }

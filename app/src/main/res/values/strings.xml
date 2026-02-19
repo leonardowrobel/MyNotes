@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MyNotes</string>
+
+    <string name="title_edit">Edit your note</string>
+    <string name="title_create">Create a new note</string>
+
+    <string name="placeholder_title">Title</string>
+    <string name="placeholder_content">Content</string>
+
+    <string name="action_create">Create</string>
+    <string name="action_edit">Edit</string>
+
+    <string name="message_conclude_edit">Note edited.</string>
+    <string name="message_conclude_creation">Note created!</string>
 </resources>
