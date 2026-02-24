@@ -1,21 +1,28 @@
 package com.lw.mynotes.featurenote.ui.addedit
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,8 +36,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.lw.mynotes.featurenote.ui.components.Fab
+import com.lw.mynotes.featurenote.ui.components.SquareFab
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNoteScreen(
     viewModel: AddEditNoteViewModel = hiltViewModel(),
@@ -74,72 +84,91 @@ fun AddEditNoteScreen(
         viewModel.clearMessage()
     }
 
-    Surface(
-        Modifier.fillMaxSize(), color = Color.White
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 14.dp, vertical = 18.dp)
-        ) {
-            Spacer(modifier = Modifier.size(12.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = if(state.id == null) "Criar nota" else "Editar nota",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                if(state.id != null){
-                    IconButton(
-                        onClick = { viewModel.delete() }
-                    ) {
-                        Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.size(8.dp))
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = state.title,
-                onValueChange = {
-                    if(it.length <= masTitleChar){
-                        viewModel.onTitleChanged(it)
-                    } else {
-                        viewModel.onError(
-                            ErrorType.MAX_TITLE_CHARACTER_REACHED,
-                            "Máximo de caracteres atingido!"
-                        )
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {Text(text = if(state.id == null) "Criar nota" else "Editar nota", fontWeight = FontWeight.Bold)})
+        },
+        bottomBar = {
+            BottomAppBar(
+                actions = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(horizontal = 18.dp, vertical = 10.dp),
+                        shape = RoundedCornerShape(10),
+                        enabled = state.status != AddEditNoteUiStatus.PRISTINE,
+                        onClick = { if(state.id == null) viewModel.create() else viewModel.edit()}) {
+                        Text(if(state.id == null) "Criar" else "Editar")
                     }
                 },
-                label = { Text("Título") },
-                maxLines = 2
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                value = state.content,
-                onValueChange = {
-                    if(it.length <= masContentChar) {
-                        viewModel.onContentChanged(it)
-                    } else {
-                        viewModel.onError(
-                            ErrorType.MAX_CONTENT_CHARACTER_REACHED,
-                            "Máximo de caracteres atingido!"
-                        )
-                    }
-                },
-                label = { Text("Conteúdo") }
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                enabled = state.status != AddEditNoteUiStatus.PRISTINE,
-                onClick = { if(state.id == null) viewModel.create() else viewModel.edit()}) {
-                    Text(if(state.id == null) "Criar" else "Editar")
+                floatingActionButton = {
+                    SquareFab(onClick = { if(state.id != null) viewModel.delete() }, icon = Icons.Filled.Delete, enable = state.id != null)
                 }
+            )
         }
+    ) { innerPadding ->
+        Surface(
+            Modifier.fillMaxSize().padding(innerPadding), color = Color.White
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+//                    .padding(horizontal = 14.dp, vertical = 18.dp)
+                    .padding(horizontal = 18.dp)
+            ) {
+    //            Row(
+    //                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+    //            ) {
+    //                Text(
+    //                    modifier = Modifier.weight(1f),
+    //                    text = if(state.id == null) "Criar nota" else "Editar nota",
+    //                    fontSize = 24.sp,
+    //                    fontWeight = FontWeight.Bold
+    //                )
+    //                if(state.id != null){
+    //                    IconButton(
+    //                        onClick = { viewModel.delete() }
+    //                    ) {
+    //                        Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+    //                    }
+    //                }
+    //            }
+                Spacer(modifier = Modifier.size(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state.title,
+                    onValueChange = {
+                        if(it.length <= masTitleChar){
+                            viewModel.onTitleChanged(it)
+                        } else {
+                            viewModel.onError(
+                                ErrorType.MAX_TITLE_CHARACTER_REACHED,
+                                "Máximo de caracteres atingido!"
+                            )
+                        }
+                    },
+                    label = { Text("Título") },
+                    maxLines = 2
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    value = state.content,
+                    onValueChange = {
+                        if(it.length <= masContentChar) {
+                            viewModel.onContentChanged(it)
+                        } else {
+                            viewModel.onError(
+                                ErrorType.MAX_CONTENT_CHARACTER_REACHED,
+                                "Máximo de caracteres atingido!"
+                            )
+                        }
+                    },
+                    label = { Text("Conteúdo") }
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+
+            }
+        }
+
     }
+
 }
