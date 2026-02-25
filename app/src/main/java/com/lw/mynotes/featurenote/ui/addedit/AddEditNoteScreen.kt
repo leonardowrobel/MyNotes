@@ -2,35 +2,40 @@ package com.lw.mynotes.featurenote.ui.addedit
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNoteScreen(
     viewModel: AddEditNoteViewModel = hiltViewModel(),
@@ -74,72 +79,95 @@ fun AddEditNoteScreen(
         viewModel.clearMessage()
     }
 
-    Surface(
-        Modifier.fillMaxSize(), color = Color.White
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 14.dp, vertical = 18.dp)
-        ) {
-            Spacer(modifier = Modifier.size(12.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = if(state.id == null) "Criar nota" else "Editar nota",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                if(state.id != null){
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = if(state.id == null) "Criar nota" else "Editar nota", fontWeight = FontWeight.Bold)
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }
+            )
+        },
+        bottomBar = {
+            BottomAppBar(
+                actions = {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(horizontal = 18.dp, vertical = 10.dp),
+                        shape = RoundedCornerShape(10),
+                        enabled = state.status != AddEditNoteUiStatus.PRISTINE,
+                        onClick = { if(state.id == null) viewModel.create() else viewModel.edit()}) {
+                        Text(if(state.id == null) "Criar" else "Editar")
+                    }
                     IconButton(
-                        onClick = { viewModel.delete() }
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 18.dp, vertical = 10.dp),
+                        enabled = state.id != null,
+                        onClick =  { if(state.id != null) viewModel.delete() }
                     ) {
-                        Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+                        Icon(Icons.Filled.Delete, contentDescription = "Delete note")
                     }
                 }
+            )
+        }
+    ) { innerPadding ->
+        Surface(
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding), color = Color.White
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 18.dp)
+            ) {
+                Spacer(modifier = Modifier.size(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = state.title,
+                    onValueChange = {
+                        if(it.length <= masTitleChar){
+                            viewModel.onTitleChanged(it)
+                        } else {
+                            viewModel.onError(
+                                ErrorType.MAX_TITLE_CHARACTER_REACHED,
+                                "Máximo de caracteres atingido!"
+                            )
+                        }
+                    },
+                    label = { Text("Título") },
+                    maxLines = 2
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    value = state.content,
+                    onValueChange = {
+                        if(it.length <= masContentChar) {
+                            viewModel.onContentChanged(it)
+                        } else {
+                            viewModel.onError(
+                                ErrorType.MAX_CONTENT_CHARACTER_REACHED,
+                                "Máximo de caracteres atingido!"
+                            )
+                        }
+                    },
+                    label = { Text("Conteúdo") }
+                )
+                Spacer(modifier = Modifier.size(8.dp))
             }
-            Spacer(modifier = Modifier.size(8.dp))
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = state.title,
-                onValueChange = {
-                    if(it.length <= masTitleChar){
-                        viewModel.onTitleChanged(it)
-                    } else {
-                        viewModel.onError(
-                            ErrorType.MAX_TITLE_CHARACTER_REACHED,
-                            "Máximo de caracteres atingido!"
-                        )
-                    }
-                },
-                label = { Text("Título") },
-                maxLines = 2
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                value = state.content,
-                onValueChange = {
-                    if(it.length <= masContentChar) {
-                        viewModel.onContentChanged(it)
-                    } else {
-                        viewModel.onError(
-                            ErrorType.MAX_CONTENT_CHARACTER_REACHED,
-                            "Máximo de caracteres atingido!"
-                        )
-                    }
-                },
-                label = { Text("Conteúdo") }
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                enabled = state.status != AddEditNoteUiStatus.PRISTINE,
-                onClick = { if(state.id == null) viewModel.create() else viewModel.edit()}) {
-                    Text(if(state.id == null) "Criar" else "Editar")
-                }
         }
     }
 }
