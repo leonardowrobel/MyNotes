@@ -1,9 +1,7 @@
 package com.lw.mynotes.featurenote.ui.addedit
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -27,17 +26,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.lw.mynotes.featurenote.ui.components.Fab
-import com.lw.mynotes.featurenote.ui.components.SquareFab
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,51 +81,56 @@ fun AddEditNoteScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {Text(text = if(state.id == null) "Criar nota" else "Editar nota", fontWeight = FontWeight.Bold)})
+            TopAppBar(
+                title = {
+                    Text(text = if(state.id == null) "Criar nota" else "Editar nota", fontWeight = FontWeight.Bold)
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }
+            )
         },
         bottomBar = {
             BottomAppBar(
                 actions = {
                     Button(
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(horizontal = 18.dp, vertical = 10.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(horizontal = 18.dp, vertical = 10.dp),
                         shape = RoundedCornerShape(10),
                         enabled = state.status != AddEditNoteUiStatus.PRISTINE,
                         onClick = { if(state.id == null) viewModel.create() else viewModel.edit()}) {
                         Text(if(state.id == null) "Criar" else "Editar")
                     }
-                },
-                floatingActionButton = {
-                    SquareFab(onClick = { if(state.id != null) viewModel.delete() }, icon = Icons.Filled.Delete, enable = state.id != null)
+                    IconButton(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 18.dp, vertical = 10.dp),
+                        enabled = state.id != null,
+                        onClick =  { if(state.id != null) viewModel.delete() }
+                    ) {
+                        Icon(Icons.Filled.Delete, contentDescription = "Delete note")
+                    }
                 }
             )
         }
     ) { innerPadding ->
         Surface(
-            Modifier.fillMaxSize().padding(innerPadding), color = Color.White
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding), color = Color.White
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-//                    .padding(horizontal = 14.dp, vertical = 18.dp)
                     .padding(horizontal = 18.dp)
             ) {
-    //            Row(
-    //                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
-    //            ) {
-    //                Text(
-    //                    modifier = Modifier.weight(1f),
-    //                    text = if(state.id == null) "Criar nota" else "Editar nota",
-    //                    fontSize = 24.sp,
-    //                    fontWeight = FontWeight.Bold
-    //                )
-    //                if(state.id != null){
-    //                    IconButton(
-    //                        onClick = { viewModel.delete() }
-    //                    ) {
-    //                        Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
-    //                    }
-    //                }
-    //            }
                 Spacer(modifier = Modifier.size(8.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -150,7 +150,9 @@ fun AddEditNoteScreen(
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
                     value = state.content,
                     onValueChange = {
                         if(it.length <= masContentChar) {
@@ -165,10 +167,7 @@ fun AddEditNoteScreen(
                     label = { Text("Conteúdo") }
                 )
                 Spacer(modifier = Modifier.size(8.dp))
-
             }
         }
-
     }
-
 }
