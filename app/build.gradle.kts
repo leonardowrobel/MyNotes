@@ -104,6 +104,12 @@ dependencies {
 
     // FIREBASE
     implementation(platform(libs.google.firebase.bom))
+    implementation(libs.google.firebase.auth)
+
+    // Credential Manager
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play)
+    implementation(libs.android.identity)
 
     // TESTS [GENERAL]
     testImplementation(libs.junit)
