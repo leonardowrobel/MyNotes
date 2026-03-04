@@ -23,7 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.lw.mynotes.R
 import com.lw.mynotes.featurenote.ui.addedit.ErrorType
+import com.lw.mynotes.featurenote.ui.components.AuthenticationButton
 import com.lw.mynotes.featurenote.ui.main.NavigationEvent
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 
@@ -89,6 +91,10 @@ fun ProfileScreen(
                     .padding(horizontal = 18.dp)
             ) {
                 Spacer(modifier = Modifier.size(8.dp))
+
+                AuthenticationButton(buttonText = R.string.sign_in_with_google) { credential ->
+//                    viewModel.onSignInWithGoogle(credential, openAndPopUp)
+                }
             }
         }
     }
