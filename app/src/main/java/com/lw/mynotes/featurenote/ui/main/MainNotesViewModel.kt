@@ -35,9 +35,11 @@ class MainNotesViewModel @Inject constructor(
     private val _navigationEvents = Channel<NavigationEvent>()
     val navigationEvents = _navigationEvents.receiveAsFlow()
 
+    var test: String = ""
 
     init {
         getNotes()
+//        test = BuildConfig.TEST
     }
 
     fun getNotes() {

@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 plugins {
     alias(libs.plugins.android.application)
@@ -24,6 +25,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        android.buildFeatures.buildConfig = true
+
         // noinspection WrongGradleMethod
         ksp {
             arg ("room.schemaLocation", "$projectDir/schemas")
@@ -31,11 +34,14 @@ android {
 
     }
 
+    val googleClientId: String = gradleLocalProperties(rootDir, providers).getProperty("google.clientId")
+
     buildTypes {
         create("development"){
             initWith(getByName("debug"))
             isMinifyEnabled = false
             versionNameSuffix = "-dev"
+            buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Development version"

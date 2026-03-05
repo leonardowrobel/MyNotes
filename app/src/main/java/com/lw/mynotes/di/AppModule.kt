@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
 import com.lw.mynotes.featurenote.data.repository.NoteRepositoryImpl
 import com.lw.mynotes.featurenote.domain.repository.NoteRepository
+import com.lw.mynotes.featurenote.services.AuthenticationService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +30,11 @@ object AppModule {
     @Singleton
     fun providesNoteRepository(db: MyNotesDatabase): NoteRepository{
         return NoteRepositoryImpl(db.notesDao)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAuthenticationService(): AuthenticationService {
+        return AuthenticationService()
     }
 }

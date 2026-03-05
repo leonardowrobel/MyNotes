@@ -28,6 +28,7 @@ import com.lw.mynotes.featurenote.ui.addedit.ErrorType
 import com.lw.mynotes.featurenote.ui.components.AuthenticationButton
 import com.lw.mynotes.featurenote.ui.main.NavigationEvent
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
+import androidx.compose.runtime.collectAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +69,7 @@ fun ProfileScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Profile", fontWeight = FontWeight.Bold)
+                    Text(text = "Profile" + viewModel.user.collectAsState().value.displayName, fontWeight = FontWeight.Bold)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -93,7 +94,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.size(8.dp))
 
                 AuthenticationButton(buttonText = R.string.sign_in_with_google) { credential ->
-//                    viewModel.onSignInWithGoogle(credential, openAndPopUp)
+                    viewModel.onSignInWithGoogle(credential)
                 }
             }
         }

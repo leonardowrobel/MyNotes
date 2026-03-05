@@ -7,9 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+import com.lw.mynotes.featurenote.data.model.User
 import com.lw.mynotes.featurenote.services.AuthenticationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,11 +24,24 @@ sealed class NavigationEvent {
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    val authenticationService: AuthenticationService
+    private val authenticationService: AuthenticationService
 ): ViewModel() {
 
     private val _navigationEvents = Channel<NavigationEvent>()
     val navigationEvents = _navigationEvents.receiveAsFlow()
+
+    private val _user = MutableStateFlow(User())
+    val user: StateFlow<User> = _user.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            authenticationService.currentUser.collect { user ->
+                if (user != null) {
+                    _user.value = user
+                }
+            }
+        }
+    }
 
     private fun handleSignIn(credential: Credential) {
         // Check if credential is of type Google ID
@@ -39,14 +56,24 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun onSignUpWithGoogle(credential: Credential, openAndPopUp: (String, String) -> Unit) {
+    fun onSignUpWithGoogle(credential: Credential) {
         viewModelScope.launch {
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-//                authenticationService.linkAccountWithGoogle(googleIdTokenCredential.idToken)
-//                openAndPopUp(NOTES_LIST_SCREEN, SIGN_UP_SCREEN)
+                authenticationService.linkAccountWithGoogle(googleIdTokenCredential.idToken)
             } else {
-//                Log.e(ERROR_TAG, UNEXPECTED_CREDENTIAL)
+                Log.e(TAG, "UNEXPECTED_CREDENTIAL")
+            }
+        }
+    }
+
+    fun onSignInWithGoogle(credential: Credential) {
+        viewModelScope.launch {
+            if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                authenticationService.signInWithGoogle(googleIdTokenCredential.idToken)
+            } else {
+                Log.e(TAG, "UNEXPECTED_CREDENTIAL")
             }
         }
     }
