@@ -17,6 +17,7 @@ import javax.inject.Inject
 
 sealed class NavigationEvent {
     data class NavigateToEdit(val noteId: Long): NavigationEvent()
+    class NavigateToProfile: NavigationEvent()
 }
 
 data class MainNotesUiState(
@@ -34,9 +35,11 @@ class MainNotesViewModel @Inject constructor(
     private val _navigationEvents = Channel<NavigationEvent>()
     val navigationEvents = _navigationEvents.receiveAsFlow()
 
+    var test: String = ""
 
     init {
         getNotes()
+//        test = BuildConfig.TEST
     }
 
     fun getNotes() {
@@ -48,6 +51,12 @@ class MainNotesViewModel @Inject constructor(
     fun editNote(id: Long){
         viewModelScope.launch {
             _navigationEvents.send(NavigationEvent.NavigateToEdit(id))
+        }
+    }
+
+    fun goToProfile(){
+        viewModelScope.launch {
+            _navigationEvents.send(NavigationEvent.NavigateToProfile())
         }
     }
 

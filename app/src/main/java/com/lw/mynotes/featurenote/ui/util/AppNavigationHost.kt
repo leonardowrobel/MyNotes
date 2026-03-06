@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.lw.mynotes.featurenote.ui.addedit.AddEditNoteScreen
 import com.lw.mynotes.featurenote.ui.main.MainNotesScreen
+import com.lw.mynotes.featurenote.ui.profile.ProfileScreen
 
 @Composable
 fun AppNavigationHost(
@@ -32,6 +33,9 @@ fun AppNavigationHost(
         )){ backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")
             AddEditNoteScreen(navController = navController, noteId = id?.toLongOrNull())
+        }
+        composable(NavigationItem.Profile.route){
+            ProfileScreen(navController = navController)
         }
     }
 }

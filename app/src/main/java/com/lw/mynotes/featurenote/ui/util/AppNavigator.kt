@@ -5,12 +5,14 @@ import javax.inject.Singleton
 
 enum class Screen {
     HOME,
-    ADD_EDIT_NOTE
+    ADD_EDIT_NOTE,
+    PROFILE
 }
 
 sealed class NavigationItem(val route: String) {
     object MainNotes: NavigationItem(Screen.HOME.name)
     object AddEditNote: NavigationItem(Screen.ADD_EDIT_NOTE.name)
+    object Profile: NavigationItem(Screen.PROFILE.name)
 }
 
 // TODO: improve navigator

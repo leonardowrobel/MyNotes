@@ -10,6 +10,8 @@
     <string name="action_create">Create</string>
     <string name="action_edit">Edit</string>
 
+    <string name="sign_in_with_google">Sign in with Google</string>
+
     <string name="message_conclude_edit">Note edited.</string>
     <string name="message_conclude_creation">Note created!</string>
 </resources>
