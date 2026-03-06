@@ -56,16 +56,16 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun onSignUpWithGoogle(credential: Credential) {
-        viewModelScope.launch {
-            if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                authenticationService.linkAccountWithGoogle(googleIdTokenCredential.idToken)
-            } else {
-                Log.e(TAG, "UNEXPECTED_CREDENTIAL")
-            }
-        }
-    }
+//    fun onSignUpWithGoogle(credential: Credential) {
+//        viewModelScope.launch {
+//            if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+//                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+//                authenticationService.linkAccountWithGoogle(googleIdTokenCredential.idToken)
+//            } else {
+//                Log.e(TAG, "UNEXPECTED_CREDENTIAL")
+//            }
+//        }
+//    }
 
     fun onSignInWithGoogle(credential: Credential) {
         viewModelScope.launch {
@@ -75,6 +75,12 @@ class ProfileViewModel @Inject constructor(
             } else {
                 Log.e(TAG, "UNEXPECTED_CREDENTIAL")
             }
+        }
+    }
+
+    fun onSignOut() {
+        viewModelScope.launch {
+            authenticationService.signOut()
         }
     }
 

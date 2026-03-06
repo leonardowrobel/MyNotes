@@ -1,13 +1,12 @@
 package com.lw.mynotes.featurenote.ui.profile
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,16 +18,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lw.mynotes.R
-import com.lw.mynotes.featurenote.ui.addedit.ErrorType
 import com.lw.mynotes.featurenote.ui.components.AuthenticationButton
-import com.lw.mynotes.featurenote.ui.main.NavigationEvent
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.lw.mynotes.featurenote.data.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +34,8 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     navController: NavController
 ){
+    val user by viewModel.user.collectAsState(initial = User())
+
     LaunchedEffect(Unit) {
 //        viewModel.getProfile()
         viewModel.navigationEvents.collect{ navEvent ->
@@ -69,7 +69,19 @@ fun ProfileScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Profile" + viewModel.user.collectAsState().value.displayName, fontWeight = FontWeight.Bold)
+                    Text(text = "Profile")
+                }, actions = {
+                    if(!user.isAnonymous){
+                        IconButton(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(horizontal = 18.dp, vertical = 10.dp),
+                            onClick =  { viewModel.onSignOut() }
+                        ) {
+                            Icon(Icons.Filled.ExitToApp, contentDescription = "Profile")
+                        }
+
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -89,12 +101,21 @@ fun ProfileScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 18.dp)
+                    .padding(18.dp)
             ) {
-                Spacer(modifier = Modifier.size(8.dp))
-
-                AuthenticationButton(buttonText = R.string.sign_in_with_google) { credential ->
-                    viewModel.onSignInWithGoogle(credential)
+                Column(
+                    modifier = Modifier.weight(1f, true)
+                ) {
+                    if(user.isAnonymous){
+                        Text("Please log in to access your information!")
+                    } else {
+                        Text("Welcome back, " + user.displayName + ".")
+                    }
+                }
+                if(user.isAnonymous){
+                    AuthenticationButton(buttonText = R.string.sign_in_with_google) { credential ->
+                        viewModel.onSignInWithGoogle(credential)
+                    }
                 }
             }
         }
