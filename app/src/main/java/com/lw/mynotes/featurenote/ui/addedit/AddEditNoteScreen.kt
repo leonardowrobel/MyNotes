@@ -124,7 +124,7 @@ fun AddEditNoteScreen(
         Surface(
             Modifier
                 .fillMaxSize()
-                .padding(innerPadding), color = Color.White
+                .padding(innerPadding)
         ) {
             Column(
                 modifier = Modifier

@@ -16,10 +16,12 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -55,17 +57,25 @@ fun MainNotesScreen (
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "My Notes", fontWeight = FontWeight.Bold) },
-                actions = {
+                title = {
+                    Text(
+                        text = "My Notes",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary)
+                }, actions = {
                     IconButton(
                         modifier = Modifier
                             .fillMaxHeight()
                             .padding(horizontal = 18.dp, vertical = 10.dp),
                         onClick =  { viewModel.goToProfile() }
                     ) {
-                        Icon(Icons.Filled.Person, contentDescription = "Profile")
+                        Icon(
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Profile",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
                     }
-                }
+                }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
             )
         },
         floatingActionButton = {
@@ -75,7 +85,7 @@ fun MainNotesScreen (
         Surface(
             Modifier
                 .fillMaxSize()
-                .padding(innerPadding), color = Color.White
+                .padding(innerPadding)
         ) {
             Box(
                 modifier = Modifier.fillMaxSize()

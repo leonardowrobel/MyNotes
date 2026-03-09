@@ -96,7 +96,6 @@ fun ProfileScreen(
         Surface(
             Modifier
                 .fillMaxSize()
-                .padding(innerPadding), color = Color.White
         ) {
             Column(
                 modifier = Modifier

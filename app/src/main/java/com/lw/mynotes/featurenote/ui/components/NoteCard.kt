@@ -29,7 +29,6 @@ fun NoteCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(0xFFFFFF99))
             .padding(10.dp, 8.dp)
     ) {
         Row {
