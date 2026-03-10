@@ -1,13 +1,16 @@
 package com.lw.mynotes.featurenote.ui.main
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -59,14 +62,17 @@ fun MainNotesScreen (
             TopAppBar(
                 title = {
                     Text(
+                        modifier = Modifier.offset(x = 8.dp),
                         text = "My Notes",
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary)
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
                 }, actions = {
                     IconButton(
                         modifier = Modifier
+                            .padding(horizontal = 18.dp, vertical = 10.dp)
                             .fillMaxHeight()
-                            .padding(horizontal = 18.dp, vertical = 10.dp),
+                            .border(1.dp, MaterialTheme.colorScheme.onPrimary, shape = CircleShape),
                         onClick =  { viewModel.goToProfile() }
                     ) {
                         Icon(
