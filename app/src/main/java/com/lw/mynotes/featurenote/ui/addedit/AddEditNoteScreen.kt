@@ -1,27 +1,37 @@
 package com.lw.mynotes.featurenote.ui.addedit
 
 import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -83,41 +93,61 @@ fun AddEditNoteScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = if(state.id == null) "Criar nota" else "Editar nota", fontWeight = FontWeight.Bold)
+                    Text(
+                        text = if(state.id == null) "Criar nota" else "Editar nota",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            contentDescription = "Go back",
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
-                }
+                }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         },
         bottomBar = {
             BottomAppBar(
+                modifier = Modifier.padding(12.dp, 0.dp, 12.dp, 12.dp),
                 actions = {
                     Button(
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(1f, true)
                             .fillMaxHeight()
-                            .padding(horizontal = 18.dp, vertical = 10.dp),
+                            .padding(vertical = 10.dp),
+//                            .padding(horizontal = 8.dp, vertical = 10.dp),
                         shape = RoundedCornerShape(10),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
                         enabled = state.status != AddEditNoteUiStatus.PRISTINE,
                         onClick = { if(state.id == null) viewModel.create() else viewModel.edit()}) {
                         Text(if(state.id == null) "Criar" else "Editar")
                     }
-                    IconButton(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(horizontal = 18.dp, vertical = 10.dp),
-                        enabled = state.id != null,
-                        onClick =  { if(state.id != null) viewModel.delete() }
-                    ) {
-                        Icon(Icons.Filled.Delete, contentDescription = "Delete note")
+                    if(state.id != null){
+                        Spacer(modifier = Modifier.width(8.dp))
+                        IconButton(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(vertical = 10.dp)
+//                                .padding(horizontal = 8.dp, vertical = 10.dp)
+                                .border(2.dp, MaterialTheme.colorScheme.tertiary, shape = RoundedCornerShape(5.dp)),
+                            enabled = true,
+                            onClick =  { viewModel.delete() }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete note",
+                                tint = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
                     }
-                }
+                }, containerColor = MaterialTheme.colorScheme.surface
             )
         }
     ) { innerPadding ->
@@ -131,7 +161,7 @@ fun AddEditNoteScreen(
                     .fillMaxSize()
                     .padding(horizontal = 18.dp)
             ) {
-                Spacer(modifier = Modifier.size(8.dp))
+                Spacer(modifier = Modifier.size(12.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = state.title,
@@ -145,6 +175,13 @@ fun AddEditNoteScreen(
                             )
                         }
                     },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+                    ),
                     label = { Text("Título") },
                     maxLines = 2
                 )
@@ -164,9 +201,16 @@ fun AddEditNoteScreen(
                             )
                         }
                     },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
+                    ),
                     label = { Text("Conteúdo") }
                 )
-                Spacer(modifier = Modifier.size(8.dp))
+//                Spacer(modifier = Modifier.size(18.dp))
             }
         }
     }
