@@ -38,6 +38,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.font.FontWeight
 import com.lw.mynotes.featurenote.ui.components.NoteCard
 
+// TODO: Organize design/theme systems
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainNotesScreen (

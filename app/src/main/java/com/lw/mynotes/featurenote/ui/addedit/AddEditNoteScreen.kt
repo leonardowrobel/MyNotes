@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 
+// TODO: Organize design/theme systems
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNoteScreen(
@@ -119,7 +120,6 @@ fun AddEditNoteScreen(
                             .weight(1f, true)
                             .fillMaxHeight()
                             .padding(vertical = 10.dp),
-//                            .padding(horizontal = 8.dp, vertical = 10.dp),
                         shape = RoundedCornerShape(10),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
@@ -135,7 +135,6 @@ fun AddEditNoteScreen(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .padding(vertical = 10.dp)
-//                                .padding(horizontal = 8.dp, vertical = 10.dp)
                                 .border(2.dp, MaterialTheme.colorScheme.tertiary, shape = RoundedCornerShape(5.dp)),
                             enabled = true,
                             onClick =  { viewModel.delete() }

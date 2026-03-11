@@ -1,19 +1,24 @@
 package com.lw.mynotes.featurenote.ui.profile
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -26,8 +31,10 @@ import com.lw.mynotes.featurenote.ui.components.AuthenticationButton
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.font.FontWeight
 import com.lw.mynotes.featurenote.data.model.User
 
+// TODO: Organize design/theme systems
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
@@ -69,7 +76,9 @@ fun ProfileScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Profile")
+                    Text(text = "Profile",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimary)
                 }, actions = {
                     if(!user.isAnonymous){
                         IconButton(
@@ -78,42 +87,61 @@ fun ProfileScreen(
                                 .padding(horizontal = 18.dp, vertical = 10.dp),
                             onClick =  { viewModel.onSignOut() }
                         ) {
-                            Icon(Icons.Filled.ExitToApp, contentDescription = "Profile")
+                            Icon(
+                                imageVector = Icons.Filled.ExitToApp,
+                                contentDescription = "Profile",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
-
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Voltar"
+                            contentDescription = "Voltar",
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
-                }
+                }, colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
-        }) { innerPadding ->
+        },
+        bottomBar = {
+            BottomAppBar(
+                modifier = Modifier.padding(12.dp, 0.dp, 12.dp, 12.dp),
+                actions = {
+                    if(user.isAnonymous){
+                        AuthenticationButton(buttonText = R.string.sign_in_with_google) { credential ->
+                            viewModel.onSignInWithGoogle(credential)
+                        }
+                    }
+                }, containerColor = MaterialTheme.colorScheme.surface
+            )
+        }
+    ) { innerPadding ->
         Surface(
             Modifier
                 .fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
+            Surface(
+                Modifier
                     .fillMaxSize()
-                    .padding(18.dp)
-            ) {
+                    .padding(innerPadding)
+            ){
                 Column(
-                    modifier = Modifier.weight(1f, true)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 18.dp)
                 ) {
-                    if(user.isAnonymous){
-                        Text("Please log in to access your information!")
-                    } else {
-                        Text("Welcome back, " + user.displayName + ".")
-                    }
-                }
-                if(user.isAnonymous){
-                    AuthenticationButton(buttonText = R.string.sign_in_with_google) { credential ->
-                        viewModel.onSignInWithGoogle(credential)
+                    Column(
+                        modifier = Modifier.weight(1f, true)
+                    ) {
+                        Spacer(modifier = Modifier.size(12.dp))
+                        if(user.isAnonymous){
+                            Text("Please log in to access your information!")
+                        } else {
+                            Text("Welcome back, " + user.displayName + ".")
+                        }
                     }
                 }
             }
