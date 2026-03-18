@@ -35,18 +35,20 @@ android {
     }
 
     val googleClientId: String = gradleLocalProperties(rootDir, providers).getProperty("google.clientId")
+    val googleServiceAccountFileName: String = gradleLocalProperties(rootDir, providers).getProperty("google.serviceAccount.file")
 
     buildTypes {
         create("development"){
             initWith(getByName("debug"))
             isMinifyEnabled = false
+            isDebuggable = true
             versionNameSuffix = "-dev"
             buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Development version"
                 groups = "dev-qa"
-                serviceCredentialsFile = "$rootDir/my-notes-dev-24774-ea1adae1d3e4.json"
+                serviceCredentialsFile = "$rootDir/$googleServiceAccountFileName"
             }
         }
         release {
