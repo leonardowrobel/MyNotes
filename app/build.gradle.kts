@@ -111,6 +111,7 @@ dependencies {
     // FIREBASE
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.auth)
+    implementation(libs.google.firebase.firestore)
 
     // Credential Manager
     implementation(libs.androidx.credentials)
