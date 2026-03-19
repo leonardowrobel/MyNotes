@@ -5,10 +5,10 @@ import androidx.room.OnConflictStrategy
 
 interface BaseDAO<T> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: T): Long
+    fun insert(entity: T)
 
     @Insert
-    fun insert(entities: List<T>): List<Long>
+    fun insert(entities: List<T>)
 
 //    @Update
 //    fun update(entity: T)

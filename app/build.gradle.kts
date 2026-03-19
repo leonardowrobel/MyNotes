@@ -1,5 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+import org.gradle.kotlin.dsl.main
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.firebase.appdistribution)
@@ -34,6 +36,7 @@ android {
 
     }
 
+
     val googleClientId: String = gradleLocalProperties(rootDir, providers).getProperty("google.clientId")
     val googleServiceAccountFileName: String = gradleLocalProperties(rootDir, providers).getProperty("google.serviceAccount.file")
 
@@ -59,6 +62,9 @@ android {
             )
         }
     }
+
+    testBuildType = "development"
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

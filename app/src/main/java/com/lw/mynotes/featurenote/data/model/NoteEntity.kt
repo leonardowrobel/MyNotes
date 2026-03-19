@@ -7,8 +7,9 @@ import com.lw.mynotes.featurenote.domain.model.Note
 
 @Entity(tableName = "notes")
 data class NoteEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey(autoGenerate = false)
+    val id: String = "",
+    val userId: String = "",
     val title: String,
     val content: String,
     @ColumnInfo(name = "created_at")
@@ -23,6 +24,7 @@ data class NoteEntity(
         fun from(note: Note): NoteEntity{
             return NoteEntity(
                 note.id,
+                note.userId,
                 note.title,
                 note.content,
                 note.createdAt,
@@ -32,6 +34,6 @@ data class NoteEntity(
     }
 
     fun toNote(): Note {
-        return Note(id, title, content, createdAt, updatedAt, deletedAt)
+        return Note(id, userId, title, content, createdAt, updatedAt, deletedAt)
     }
 }
