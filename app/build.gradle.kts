@@ -36,7 +36,7 @@ android {
 
     }
 
-
+    // Local
     val googleClientId: String = gradleLocalProperties(rootDir, providers).getProperty("google.clientId")
     val googleServiceAccountFileName: String = gradleLocalProperties(rootDir, providers).getProperty("google.serviceAccount.file")
 
@@ -46,6 +46,19 @@ android {
             isMinifyEnabled = false
             isDebuggable = true
             versionNameSuffix = "-dev"
+            buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "Development version"
+                groups = "dev-qa"
+                serviceCredentialsFile = "$rootDir/$googleServiceAccountFileName"
+            }
+        }
+        create("staging"){
+            initWith(getByName("development"))
+            isMinifyEnabled = true
+            isDebuggable = false
+            versionNameSuffix = "-staging"
             buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
             firebaseAppDistribution {
                 artifactType = "APK"

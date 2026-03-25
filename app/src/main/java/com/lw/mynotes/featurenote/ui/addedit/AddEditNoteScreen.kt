@@ -53,6 +53,8 @@ fun AddEditNoteScreen(
     noteId: String? = null,
     navController: NavController
 ){
+    val TAG = "ADD_EDIT_SCR"
+
     val masTitleChar = 75
     val masContentChar = 500
     val mContext = LocalContext.current

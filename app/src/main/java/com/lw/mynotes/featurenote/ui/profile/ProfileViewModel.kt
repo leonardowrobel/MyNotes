@@ -35,7 +35,7 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            authenticationService.currentUser.collect { user ->
+            authenticationService.currentUserFlow.collect { user ->
                 if (user != null) {
                     _user.value = user
                 }

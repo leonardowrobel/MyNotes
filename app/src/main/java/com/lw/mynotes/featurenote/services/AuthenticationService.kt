@@ -1,14 +1,10 @@
 package com.lw.mynotes.featurenote.services
 
-import android.provider.Settings.Secure.getString
-import androidx.credentials.GetCredentialRequest
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
-import com.lw.mynotes.BuildConfig
 import com.lw.mynotes.featurenote.data.model.User
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +22,7 @@ class AuthenticationService {
 //        .build()
 
 
-    val currentUser: Flow<User?>
+    val currentUserFlow: Flow<User?>
         get() = callbackFlow {
             val listener =
                 FirebaseAuth.AuthStateListener { auth ->
@@ -35,6 +31,9 @@ class AuthenticationService {
             Firebase.auth.addAuthStateListener(listener)
             awaitClose { Firebase.auth.removeAuthStateListener(listener) }
         }
+
+    val currentUser: User
+        get() = Firebase.auth.currentUser.toUser()
 
     val currentUserId: String
         get() = Firebase.auth.currentUser?.uid.orEmpty()
