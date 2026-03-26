@@ -5,6 +5,7 @@ import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
 import com.lw.mynotes.featurenote.domain.repository.NoteRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -14,7 +15,11 @@ class NotesService @Inject constructor(
     val firestoreNoteRepository: FirestoreNoteRepository
 ) {
     suspend fun getAll(): List<Note> {
-          return noteRepository.getAll().stream().map { it.toNote() }.toList()
+        val notes = noteRepository.getAll().stream().map { it.toNote() }.toList()
+        if(!authenticationService.currentUser.isAnonymous){
+            return notes + firestoreNoteRepository.getAll(authenticationService.currentUser.id).first()
+        }
+        return notes
     }
 
     suspend fun getById(id: String): Note? {
@@ -35,11 +40,12 @@ class NotesService @Inject constructor(
 
     suspend fun createAndSave(title: String, content: String){
         withContext(Dispatchers.IO){
-            val note = Note(title = title, content = content)
             if(authenticationService.currentUser.isAnonymous){
+                val note = Note(title = title, content = content)
                 saveLocal(note)
             } else {
-              save(note)
+                val note = Note(title = title, content = content, userId = authenticationService.currentUser.id)
+                save(note)
             }
         }
     }
