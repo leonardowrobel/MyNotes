@@ -63,7 +63,11 @@ class NotesService @Inject constructor(
     }
 
     suspend fun delete(note: Note){
-        noteRepository.delete(NoteEntity.from(note))
+        if(authenticationService.currentUser.isAnonymous) {
+            noteRepository.delete(NoteEntity.from(note))
+        } else {
+            firestoreNoteRepository.delete(note)
+        }
     }
 
     suspend fun sync(cleanLocal: Boolean = false){

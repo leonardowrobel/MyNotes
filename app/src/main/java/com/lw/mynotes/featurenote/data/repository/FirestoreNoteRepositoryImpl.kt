@@ -40,14 +40,14 @@ class FirestoreNoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun update(note: Note) {
-        firestore
-            .collection(NOTES_COLLECTION)
+        firestore.collection(NOTES_COLLECTION)
             .document(note.id).set(note).await()
     }
 
-//    override suspend fun delete(note: NoteEntity) {
-//        dao.delete(note)
-//    }
+    override suspend fun delete(note: Note) {
+        firestore.collection(NOTES_COLLECTION)
+            .document(note.id).delete().await()
+    }
 
     companion object {
         const val TAG = "FIRESTORE_REPO"
