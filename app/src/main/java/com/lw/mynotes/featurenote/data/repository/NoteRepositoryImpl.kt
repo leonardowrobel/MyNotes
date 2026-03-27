@@ -12,12 +12,12 @@ class NoteRepositoryImpl @Inject constructor(
         return dao.getAll()
     }
 
-    override suspend fun get(id: Long): NoteEntity? {
+    override suspend fun get(id: String): NoteEntity? {
         return dao.get(id)
     }
 
-    override suspend fun insert(note: NoteEntity): Long {
-        return dao.insert(note)
+    override suspend fun insert(note: NoteEntity) {
+        dao.insert(note)
     }
 
     override suspend fun update(note: NoteEntity) {

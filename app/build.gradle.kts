@@ -1,5 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+import org.gradle.kotlin.dsl.main
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.firebase.appdistribution)
@@ -34,19 +36,35 @@ android {
 
     }
 
+    // Local
     val googleClientId: String = gradleLocalProperties(rootDir, providers).getProperty("google.clientId")
+    val googleServiceAccountFileName: String = gradleLocalProperties(rootDir, providers).getProperty("google.serviceAccount.file")
 
     buildTypes {
         create("development"){
             initWith(getByName("debug"))
             isMinifyEnabled = false
+            isDebuggable = true
             versionNameSuffix = "-dev"
             buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Development version"
                 groups = "dev-qa"
-                serviceCredentialsFile = "$rootDir/my-notes-dev-24774-ea1adae1d3e4.json"
+                serviceCredentialsFile = "$rootDir/$googleServiceAccountFileName"
+            }
+        }
+        create("staging"){
+            initWith(getByName("development"))
+            isMinifyEnabled = true
+            isDebuggable = false
+            versionNameSuffix = "-staging"
+            buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "Development version"
+                groups = "dev-qa"
+                serviceCredentialsFile = "$rootDir/$googleServiceAccountFileName"
             }
         }
         release {
@@ -57,6 +75,9 @@ android {
             )
         }
     }
+
+    testBuildType = "development"
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -111,6 +132,7 @@ dependencies {
     // FIREBASE
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.auth)
+    implementation(libs.google.firebase.firestore)
 
     // Credential Manager
     implementation(libs.androidx.credentials)

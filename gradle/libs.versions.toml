@@ -45,6 +45,7 @@ androidx-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-co
 google-truth = { group = "com.google.truth", name = "truth", version.ref = "truth"}
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "bom"}
 google-firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 android-arch-core = { group = "android.arch.core", name = "core-testing", version.ref = "arch" }
 android-identity = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleId" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}

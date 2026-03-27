@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.services.NotesService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +29,7 @@ enum class AddEditNoteUiStatus {
 
 data class AddEditNoteUiState(
     val note: Note? = null,
-    val id: Long? = null,
+    val id: String? = null,
     val title: String = "",
     val content: String = "",
     val errorType: ErrorType = ErrorType.NO_ERROR,
@@ -52,7 +53,8 @@ class AddEditNoteViewModel @Inject constructor(
     private val _navigationEvents = Channel<NavigationEvent>()
     val navigationEvents = _navigationEvents.receiveAsFlow()
 
-    fun loadNote(id: Long){
+    fun loadNote(id: String){
+        Log.d(TAG, "loadNote($id)")
         viewModelScope.launch {
             val note = notesService.getById(id)
             _uiState.update { it.copy(note = note, title = note!!.title, content = note.content, id = note.id) }
@@ -86,11 +88,11 @@ class AddEditNoteViewModel @Inject constructor(
     fun create(){
         Log.d(TAG, "create()")
         viewModelScope.launch {
-            notesService.create(_uiState.value.title, _uiState.value.content)
+            notesService.createAndSave(_uiState.value.title, _uiState.value.content)
             _uiState.update { it.copy(message = "Criação de nota concluída.") }
             _navigationEvents.send(NavigationEvent.NavigateToMain())
         }
-        clearData()
+//        clearData()
     }
 
     fun edit(){

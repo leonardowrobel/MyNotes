@@ -17,3 +17,5 @@ local.properties
 /app/google-services.json
 /*.json
 /.kotlin/errors/
+/.firebaserc
+/firestore-debug.log

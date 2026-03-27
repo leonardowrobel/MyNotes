@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class NavigationEvent {
-    data class NavigateToEdit(val noteId: Long): NavigationEvent()
+    data class NavigateToEdit(val noteId: String): NavigationEvent()
     class NavigateToProfile: NavigationEvent()
 }
 
@@ -48,7 +48,7 @@ class MainNotesViewModel @Inject constructor(
         }
     }
 
-    fun editNote(id: Long){
+    fun editNote(id: String){
         viewModelScope.launch {
             _navigationEvents.send(NavigationEvent.NavigateToEdit(id))
         }

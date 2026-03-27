@@ -50,9 +50,11 @@ import com.lw.mynotes.featurenote.ui.util.NavigationItem
 @Composable
 fun AddEditNoteScreen(
     viewModel: AddEditNoteViewModel = hiltViewModel(),
-    noteId: Long? = null,
+    noteId: String? = null,
     navController: NavController
 ){
+    val TAG = "ADD_EDIT_SCR"
+
     val masTitleChar = 75
     val masContentChar = 500
     val mContext = LocalContext.current
