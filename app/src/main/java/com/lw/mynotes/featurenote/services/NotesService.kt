@@ -70,13 +70,17 @@ class NotesService @Inject constructor(
         }
     }
 
+    private suspend fun deleteLocal(note: Note){
+        noteRepository.delete(NoteEntity.from(note))
+    }
+
     suspend fun sync(cleanLocal: Boolean = false){
         val notesLocal = getAllLocal()
         if(notesLocal.isNotEmpty()){
             for (note in notesLocal){
                 saveRemote(note.copy(userId = authenticationService.currentUser.id))
                 if(cleanLocal){
-                    delete(note)
+                    deleteLocal(note)
                 }
             }
         }

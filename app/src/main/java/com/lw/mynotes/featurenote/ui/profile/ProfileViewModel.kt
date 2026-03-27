@@ -33,6 +33,7 @@ data class ProfileUiState(
     val errorType: ErrorType = ErrorType.NO_ERROR,
     val errorMessage: String = "",
     val message: String = "",
+    val showDialog: Boolean = false,
 )
 
 @HiltViewModel
@@ -89,9 +90,7 @@ class ProfileViewModel @Inject constructor(
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 authenticationService.signInWithGoogle(googleIdTokenCredential.idToken)
-                _uiState.update { it.copy(message = "Suas notas vão ser sincronizadas!") }
-                // TODO: ask if user wants to update and remove notes from local anonymous user
-                notesService.sync()
+                _uiState.update { it.copy(showDialog = true) }
             } else {
                 Log.e(TAG, "UNEXPECTED_CREDENTIAL")
             }
@@ -110,6 +109,17 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             authenticationService.signOut()
         }
+    }
+
+    fun syncNotes(deleteLocal: Boolean){
+        viewModelScope.launch {
+            notesService.sync(deleteLocal)
+            _uiState.update { it.copy(showDialog = false) }
+        }
+    }
+
+    fun dismissDialog(){
+        _uiState.update { it.copy(showDialog = false) }
     }
 
     companion object {
