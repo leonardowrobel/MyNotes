@@ -11,31 +11,39 @@ import javax.inject.Inject
 
 class NotesService @Inject constructor(
     val noteRepository: NoteRepository,
-    val authenticationService: AuthenticationService,
-    val firestoreNoteRepository: FirestoreNoteRepository
+    val firestoreNoteRepository: FirestoreNoteRepository,
+    val authenticationService: AuthenticationService
 ) {
     suspend fun getAll(): List<Note> {
-        val notes = noteRepository.getAll().stream().map { it.toNote() }.toList()
-        if(!authenticationService.currentUser.isAnonymous){
-            return notes + firestoreNoteRepository.getAll(authenticationService.currentUser.id).first()
+        return if(authenticationService.currentUser.isAnonymous){
+            noteRepository.getAll().stream().map { it.toNote() }.toList()
+        } else {
+            firestoreNoteRepository.getAll(authenticationService.currentUser.id).first()
         }
-        return notes
+    }
+
+    private suspend fun getAllLocal(): List<Note> {
+        return noteRepository.getAll().stream().map { it.toNote() }.toList()
     }
 
     suspend fun getById(id: String): Note? {
-        return noteRepository.get(id)?.toNote()
+        return if(authenticationService.currentUser.isAnonymous) {
+            noteRepository.get(id)?.toNote()
+        } else {
+            firestoreNoteRepository.get(id)
+        }
     }
 
-    suspend fun saveLocal(note: Note) {
-        noteRepository.insert(NoteEntity.from(note))
-    }
-
-    suspend fun save(note: Note) {
-        firestoreNoteRepository.insert(note)
-    }
-
-    suspend fun update(note: Note) {
-        return noteRepository.update(NoteEntity.from(note))
+    suspend fun sync(cleanLocal: Boolean = false){
+        val notesLocal = getAllLocal()
+        if(notesLocal.isNotEmpty()){
+            for (note in notesLocal){
+                saveRemote(note.copy(userId = authenticationService.currentUser.id))
+                if(cleanLocal){
+                    delete(note)
+                }
+            }
+        }
     }
 
     suspend fun createAndSave(title: String, content: String){
@@ -45,9 +53,21 @@ class NotesService @Inject constructor(
                 saveLocal(note)
             } else {
                 val note = Note(title = title, content = content, userId = authenticationService.currentUser.id)
-                save(note)
+                saveRemote(note)
             }
         }
+    }
+
+    private suspend fun saveLocal(note: Note) {
+        noteRepository.insert(NoteEntity.from(note))
+    }
+
+    private suspend fun saveRemote(note: Note) {
+        firestoreNoteRepository.insert(note)
+    }
+
+    suspend fun update(note: Note) {
+        return noteRepository.update(NoteEntity.from(note))
     }
 
     suspend fun delete(note: Note){

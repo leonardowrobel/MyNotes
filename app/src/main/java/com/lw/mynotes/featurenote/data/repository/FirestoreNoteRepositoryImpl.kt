@@ -3,9 +3,11 @@ package com.lw.mynotes.featurenote.data.repository
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
+import com.google.firebase.firestore.toObject
 import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirestoreNoteRepositoryImpl @Inject constructor(
@@ -18,9 +20,11 @@ class FirestoreNoteRepositoryImpl @Inject constructor(
             .dataObjects<Note>()
     }
 
-//    override suspend fun get(id: Long): NoteEntity? {
-//        return dao.get(id)
-//    }
+    override suspend fun get(id: String): Note? {
+        return firestore
+            .collection(NOTES_COLLECTION)
+            .document(id).get().await().toObject()
+    }
 
     override suspend fun insert(note: Note){
            Log.d(TAG, "insert()")
