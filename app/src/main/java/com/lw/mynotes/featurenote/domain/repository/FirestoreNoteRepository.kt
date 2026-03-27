@@ -14,7 +14,7 @@ interface FirestoreNoteRepository {
     suspend fun insert(note: Note)
 //    suspend fun insert(note: Note): Long
 
-//    suspend fun update(note: Note)
+    suspend fun update(note: Note)
 
 //    suspend fun delete(note: Note)
 }

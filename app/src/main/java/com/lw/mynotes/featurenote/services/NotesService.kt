@@ -34,18 +34,6 @@ class NotesService @Inject constructor(
         }
     }
 
-    suspend fun sync(cleanLocal: Boolean = false){
-        val notesLocal = getAllLocal()
-        if(notesLocal.isNotEmpty()){
-            for (note in notesLocal){
-                saveRemote(note.copy(userId = authenticationService.currentUser.id))
-                if(cleanLocal){
-                    delete(note)
-                }
-            }
-        }
-    }
-
     suspend fun createAndSave(title: String, content: String){
         withContext(Dispatchers.IO){
             if(authenticationService.currentUser.isAnonymous){
@@ -67,11 +55,27 @@ class NotesService @Inject constructor(
     }
 
     suspend fun update(note: Note) {
-        return noteRepository.update(NoteEntity.from(note))
+        if(authenticationService.currentUser.isAnonymous) {
+            noteRepository.update(NoteEntity.from(note))
+        } else {
+            firestoreNoteRepository.update(note)
+        }
     }
 
     suspend fun delete(note: Note){
         noteRepository.delete(NoteEntity.from(note))
+    }
+
+    suspend fun sync(cleanLocal: Boolean = false){
+        val notesLocal = getAllLocal()
+        if(notesLocal.isNotEmpty()){
+            for (note in notesLocal){
+                saveRemote(note.copy(userId = authenticationService.currentUser.id))
+                if(cleanLocal){
+                    delete(note)
+                }
+            }
+        }
     }
 
     companion object {
