@@ -12,7 +12,7 @@ interface NotesDao: BaseDAO<NoteEntity> {
     suspend fun getAll(): List<NoteEntity>
 
     @Query("SELECT * FROM notes WHERE id = :id")
-    suspend fun get(id: String): NoteEntity
+    suspend fun get(id: Long): NoteEntity
 
     @Update
     suspend fun update(note: NoteEntity)

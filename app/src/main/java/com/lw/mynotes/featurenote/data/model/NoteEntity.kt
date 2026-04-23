@@ -7,10 +7,10 @@ import com.lw.mynotes.featurenote.domain.model.Note
 
 @Entity(tableName = "notes")
 data class NoteEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: String = "",
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val userId: String = "",
-    val title: String,
+    val title: String = "",
     val content: String,
     @ColumnInfo(name = "created_at")
     val createdAt: Long = System.currentTimeMillis(),

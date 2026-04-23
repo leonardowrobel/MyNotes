@@ -3,7 +3,7 @@ package com.lw.mynotes.featurenote.domain.model
 import com.google.firebase.firestore.DocumentId
 
 data class Note(
-    @DocumentId val id: String = "",
+    val id: Long = 0,
     val userId: String = "",
     val title: String = "",
     val content: String = "",

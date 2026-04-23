@@ -29,7 +29,7 @@ enum class AddEditNoteUiStatus {
 
 data class AddEditNoteUiState(
     val note: Note? = null,
-    val id: String? = null,
+    val id: Long? = null,
     val title: String = "",
     val content: String = "",
     val errorType: ErrorType = ErrorType.NO_ERROR,
@@ -53,7 +53,7 @@ class AddEditNoteViewModel @Inject constructor(
     private val _navigationEvents = Channel<NavigationEvent>()
     val navigationEvents = _navigationEvents.receiveAsFlow()
 
-    fun loadNote(id: String){
+    fun loadNote(id: Long){
         Log.d(TAG, "loadNote($id)")
         viewModelScope.launch {
             val note = notesService.getById(id)

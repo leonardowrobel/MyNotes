@@ -11,7 +11,6 @@ import com.lw.mynotes.featurenote.data.model.NoteEntity
 import com.lw.mynotes.featurenote.data.repository.NoteRepositoryImpl
 import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.services.NotesService
-import com.lw.mynotes.repository.WordRepositoryTest
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -36,7 +35,8 @@ class NotesServiceTest {
 
         notesDao = database.notesDao
         notesRepository = NoteRepositoryImpl(notesDao)
-        notesService = NotesService(notesRepository)
+        // TODO: Mock
+//        notesService = NotesService(notesRepository)
     }
 
     @After
@@ -53,7 +53,7 @@ class NotesServiceTest {
 
         notesService.getAll().let {
             val note = it[0]
-            Log.d(WordRepositoryTest.Companion.TAG, note.toString())
+            Log.d(TAG, note.toString())
 //            Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
 //            assert(it.contains(firstNoteToInsetWithId))
         }

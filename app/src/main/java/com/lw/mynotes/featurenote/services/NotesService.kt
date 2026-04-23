@@ -26,12 +26,12 @@ class NotesService @Inject constructor(
         return noteRepository.getAll().stream().map { it.toNote() }.toList()
     }
 
-    suspend fun getById(id: String): Note? {
-        return if(authenticationService.currentUser.isAnonymous) {
-            noteRepository.get(id)?.toNote()
-        } else {
-            firestoreNoteRepository.get(id)
-        }
+    suspend fun getById(id: Long): Note? {
+//        return if(authenticationService.currentUser.isAnonymous) {
+            return noteRepository.get(id)?.toNote()
+//        } else {
+//            firestoreNoteRepository.get(id)
+//        }
     }
 
     suspend fun createAndSave(title: String, content: String){

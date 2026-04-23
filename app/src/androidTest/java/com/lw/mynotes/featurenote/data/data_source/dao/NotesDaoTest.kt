@@ -1,12 +1,12 @@
-package com.lw.mynotes
+package com.lw.mynotes.featurenote.data.data_source.dao
 
 import android.util.Log
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import com.lw.mynotes.featurenote.data.TestingUtils
 import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
-import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -20,9 +20,6 @@ import java.util.Date
 @SmallTest
 class NotesDaoTest {
 
-    companion object {
-        const val TAG = "NOTES_DAO_TEST"
-    }
     private lateinit var database: MyNotesDatabase
     private lateinit var notesDao: NotesDao
     private lateinit var dateFormat: SimpleDateFormat
@@ -48,34 +45,30 @@ class NotesDaoTest {
     }
 
     @Test
-    fun insertNote_returnsTrue() = runBlocking {
-        // FIX-ME
-        val firstNoteToInset = NoteEntity(title = "Note A", content = "This is the note's content")
-        val idFromDB = notesDao.insert(firstNoteToInset)
-//        val firstNoteToInsetWithId = firstNoteToInset.copy(id = idFromDB)
+    fun insertNote_getAll_contains_true() = runBlocking {
+        val noteToInsert = TestingUtils.createNoteEntity()
+        val idFromDB = notesDao.insert(noteToInsert)
+        val noteToInsertWithId = noteToInsert.copy(id = idFromDB)
 
         notesDao.getAll().let {
             val note = it[0]
             Log.d(TAG, note.toString())
             Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
-//            assert(it.contains(firstNoteToInsetWithId))
+            assert(it.contains(noteToInsertWithId))
         }
     }
 
     @Test
-    fun insertNotes_returnsTrue() = runBlocking {
-        val noteA = NoteEntity(title = "Note A", content = "This is the note's content")
-        val noteB = NoteEntity(title = "Note B", content = "This is another note's content")
-        val noteC = NoteEntity(title = "Note C", content = "Yet another note's content")
+    fun insertNotes_getAll_size_true() = runBlocking {
+        val notes = TestingUtils.createNoteEntities(3)
 
-        val listOfIds = notesDao.insert(listOf(noteA, noteB, noteC))
-//        val noteBWithId = noteB.copy(id = listOfIds[1])
+        notesDao.insert(notes)
 
         notesDao.getAll().let {
             val note = it[0]
             Log.d(TAG, note.toString())
             Log.d(TAG, "Note created at: " + dateFormat.format(Date(note.createdAt)))
-//            assert(it.contains(noteBWithId))
+            assert(it.size == 3)
         }
     }
 
@@ -85,7 +78,8 @@ class NotesDaoTest {
         var updatedNote = NoteEntity(title = "", content = "")
         notesDao.insert(noteB)
         notesDao.getAll().let {
-            updatedNote = it[0].copy(title = "Updated note B", content = "This is the new changed content.")
+            updatedNote =
+                it[0].copy(title = "Updated note B", content = "This is the new changed content.")
         }
         notesDao.update(updatedNote)
         notesDao.getAll().let {
@@ -94,16 +88,21 @@ class NotesDaoTest {
         }
     }
 
-    @Test
-    fun updateNoteUsingId_returnsTrue() = runBlocking {
-        val noteC = NoteEntity(title = "Note C", content = "This is an unchanged content.")
-        val noteCId = notesDao.insert(noteC)
-//        val updatedNote = NoteEntity(id = noteCId, title = "Updated note C", content = "This is the new changed content.")
+//    @Test
+//    fun updateNoteUsingId_returnsTrue() = runBlocking {
+//        val noteC = NoteEntity(title = "Note C", content = "This is an unchanged content.")
+//        val noteCId = notesDao.insert(noteC)
+////        val updatedNote = NoteEntity(id = noteCId, title = "Updated note C", content = "This is the new changed content.")
+//
+////        notesDao.update(updatedNote)
+//        notesDao.getAll().let {
+//            Log.d(TAG, it[0].toString())
+////            assert(it[0].content == updatedNote.content)
+//        }
+//    }
 
-//        notesDao.update(updatedNote)
-        notesDao.getAll().let {
-            Log.d(TAG, it[0].toString())
-//            assert(it[0].content == updatedNote.content)
-        }
+    companion object {
+        const val TAG = "NOTES_DAO_TEST"
     }
+
 }

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+// FIX-ME
 class FirestoreNoteRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ): FirestoreNoteRepository {
@@ -40,13 +41,13 @@ class FirestoreNoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun update(note: Note) {
-        firestore.collection(NOTES_COLLECTION)
-            .document(note.id).set(note).await()
+//        firestore.collection(NOTES_COLLECTION)
+//            .document(note.id).set(note).await()
     }
 
     override suspend fun delete(note: Note) {
-        firestore.collection(NOTES_COLLECTION)
-            .document(note.id).delete().await()
+//        firestore.collection(NOTES_COLLECTION)
+//            .document(note.id).delete().await()
     }
 
     companion object {

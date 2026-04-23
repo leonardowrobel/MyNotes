@@ -32,7 +32,7 @@ fun AppNavigationHost(
             }
         )){ backStackEntry ->
             val id = backStackEntry.arguments?.getString("id")
-            AddEditNoteScreen(navController = navController, noteId = id)
+            AddEditNoteScreen(navController = navController, noteId = id!!.toLong())
         }
         composable(NavigationItem.Profile.route){
             ProfileScreen(navController = navController)

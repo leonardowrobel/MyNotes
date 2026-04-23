@@ -12,7 +12,7 @@ class NoteRepositoryImpl @Inject constructor(
         return dao.getAll()
     }
 
-    override suspend fun get(id: String): NoteEntity? {
+    override suspend fun get(id: Long): NoteEntity? {
         return dao.get(id)
     }
 
