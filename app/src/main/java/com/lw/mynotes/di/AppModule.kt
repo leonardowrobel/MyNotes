@@ -3,7 +3,6 @@ package com.lw.mynotes.di
 import android.app.Application
 import androidx.room.Room
 import com.google.firebase.firestore.FirebaseFirestore
-import com.lw.mynotes.BuildConfig
 import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
 import com.lw.mynotes.featurenote.data.repository.FirestoreNoteRepositoryImpl
 import com.lw.mynotes.featurenote.data.repository.NoteRepositoryImpl
@@ -40,10 +39,6 @@ object AppModule {
     @Singleton
     fun providesFirebaseNoteRepository(): FirestoreNoteRepository{
         val db = FirebaseFirestore.getInstance()
-//        val buildType = BuildConfig.BUILD_TYPE
-//        if(buildType == "development"){
-//            db.useEmulator("10.0.0.1", 8080)
-//        }
         return FirestoreNoteRepositoryImpl(db)
     }
 
