@@ -2,12 +2,12 @@ package com.lw.mynotes.featurenote.data.repository
 
 import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
 import com.lw.mynotes.featurenote.data.model.NoteEntity
-import com.lw.mynotes.featurenote.domain.repository.NoteRepository
+import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import javax.inject.Inject
 
-class NoteRepositoryImpl @Inject constructor(
+class NotesRepositoryImpl @Inject constructor(
     private val dao: NotesDao
-): NoteRepository {
+): NotesRepository {
     override suspend fun getAll(): List<NoteEntity> {
         return dao.getAll()
     }

@@ -5,9 +5,9 @@ import androidx.room.Room
 import com.google.firebase.firestore.FirebaseFirestore
 import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
 import com.lw.mynotes.featurenote.data.repository.FirestoreNoteRepositoryImpl
-import com.lw.mynotes.featurenote.data.repository.NoteRepositoryImpl
+import com.lw.mynotes.featurenote.data.repository.NotesRepositoryImpl
 import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
-import com.lw.mynotes.featurenote.domain.repository.NoteRepository
+import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import com.lw.mynotes.featurenote.services.AuthenticationService
 import dagger.Module
 import dagger.Provides
@@ -31,8 +31,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesNoteRepository(db: MyNotesDatabase): NoteRepository{
-        return NoteRepositoryImpl(db.notesDao)
+    fun providesNoteRepository(db: MyNotesDatabase): NotesRepository{
+        return NotesRepositoryImpl(db.notesDao)
     }
 
     @Provides

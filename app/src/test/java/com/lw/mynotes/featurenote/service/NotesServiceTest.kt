@@ -10,6 +10,7 @@ import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 import com.lw.mynotes.featurenote.data.repository.NoteRepositoryImpl
 import com.lw.mynotes.featurenote.domain.model.Note
+import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import com.lw.mynotes.featurenote.services.NotesService
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -21,9 +22,7 @@ import org.junit.runner.RunWith
 @SmallTest
 class NotesServiceTest {
 
-    private lateinit var database: MyNotesDatabase
-    private lateinit var notesDao: NotesDao
-    private lateinit var notesRepository: NoteRepositoryImpl
+    private lateinit var notesRepository: NotesRepository // TODO: mock this
     private lateinit var notesService: NotesService
 
     @Before

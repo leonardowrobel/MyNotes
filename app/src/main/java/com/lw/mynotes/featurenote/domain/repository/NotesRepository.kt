@@ -2,7 +2,7 @@ package com.lw.mynotes.featurenote.domain.repository
 
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 
-interface NoteRepository {
+interface NotesRepository {
 
     // TODO: implement this
 //    fun getAll(): Flow<List<Note>>
