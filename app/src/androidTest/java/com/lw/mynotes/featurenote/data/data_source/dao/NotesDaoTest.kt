@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.lw.mynotes.featurenote.data.TestingUtils
+import com.lw.mynotes.featurenote.data.NotesTestingUtils
 import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 import kotlinx.coroutines.runBlocking
@@ -23,6 +23,7 @@ class NotesDaoTest {
     private lateinit var database: MyNotesDatabase
     private lateinit var notesDao: NotesDao
     private lateinit var dateFormat: SimpleDateFormat
+    private lateinit var notesTestingUtils: NotesTestingUtils
 
     @Before
     fun setupDatabase(){
@@ -37,6 +38,7 @@ class NotesDaoTest {
     @Before
     fun setup(){
         dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:SSS")
+        notesTestingUtils = NotesTestingUtils()
     }
 
     @After
@@ -46,7 +48,7 @@ class NotesDaoTest {
 
     @Test
     fun insertNote_getAll_contains_true() = runBlocking {
-        val noteToInsert = TestingUtils.createNoteEntity()
+        val noteToInsert = notesTestingUtils.createNoteEntity()
         val idFromDB = notesDao.insert(noteToInsert)
         val noteToInsertWithId = noteToInsert.copy(id = idFromDB)
 
@@ -60,7 +62,7 @@ class NotesDaoTest {
 
     @Test
     fun insertNotes_getAll_size_true() = runBlocking {
-        val notes = TestingUtils.createNoteEntities(3)
+        val notes = notesTestingUtils.createNoteEntities(3)
 
         notesDao.insert(notes)
 
@@ -73,33 +75,23 @@ class NotesDaoTest {
     }
 
     @Test
-    fun updateNote_returnsTrue() = runBlocking {
-        val noteB = NoteEntity(title = "Note B", content = "This is an unchanged content.")
-        var updatedNote = NoteEntity(title = "", content = "")
-        notesDao.insert(noteB)
-        notesDao.getAll().let {
-            updatedNote =
-                it[0].copy(title = "Updated note B", content = "This is the new changed content.")
+    fun updateNote_newContent_returnsTrue() = runBlocking {
+        var noteToInsert = notesTestingUtils.createNoteEntity()
+        val newTitle = "Updated title."
+        val newContent = "Updated content."
+        lateinit var updatedNote: NoteEntity
+        noteToInsert = noteToInsert.copy(id = notesDao.insert(noteToInsert))
+        notesDao.get(noteToInsert.id).let {
+            updatedNote = it.copy(title = newTitle, content = newContent)
         }
         notesDao.update(updatedNote)
-        notesDao.getAll().let {
-            Log.d(TAG, it[0].toString())
-            assert(it[0].content == updatedNote.content)
+        notesDao.get(updatedNote.id).let {
+            Log.d(TAG, it.toString())
+            assert(it.content == newContent && it.title == newTitle)
         }
     }
 
-//    @Test
-//    fun updateNoteUsingId_returnsTrue() = runBlocking {
-//        val noteC = NoteEntity(title = "Note C", content = "This is an unchanged content.")
-//        val noteCId = notesDao.insert(noteC)
-////        val updatedNote = NoteEntity(id = noteCId, title = "Updated note C", content = "This is the new changed content.")
-//
-////        notesDao.update(updatedNote)
-//        notesDao.getAll().let {
-//            Log.d(TAG, it[0].toString())
-////            assert(it[0].content == updatedNote.content)
-//        }
-//    }
+    // TODO: tests for verifying database integrity after insertions, updates and delete
 
     companion object {
         const val TAG = "NOTES_DAO_TEST"
