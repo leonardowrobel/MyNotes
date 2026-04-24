@@ -13,7 +13,8 @@ class NoteRepositoryImplTest {
 
     @Before
     fun setUp() {
-        notesRepository = NotesRepositoryImpl()
+        notesDao // Mock
+//        notesRepository = NotesRepositoryImpl()
         TODO("Not yet implemented")
     }
 
