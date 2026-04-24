@@ -15,74 +15,39 @@ class NotesService @Inject constructor(
     val authenticationService: AuthenticationService
 ) {
     suspend fun getAll(): List<Note> {
-        return if(authenticationService.currentUser.isAnonymous){
-            noteRepository.getAll().stream().map { it.toNote() }.toList()
-        } else {
-            firestoreNoteRepository.getAll(authenticationService.currentUser.id).first()
-        }
-    }
-
-    private suspend fun getAllLocal(): List<Note> {
         return noteRepository.getAll().stream().map { it.toNote() }.toList()
     }
 
     suspend fun getById(id: Long): Note? {
-//        return if(authenticationService.currentUser.isAnonymous) {
-            return noteRepository.get(id)?.toNote()
-//        } else {
-//            firestoreNoteRepository.get(id)
-//        }
+        return noteRepository.get(id)?.toNote()
     }
 
-    suspend fun createAndSave(title: String, content: String){
-        withContext(Dispatchers.IO){
-            if(authenticationService.currentUser.isAnonymous){
-                val note = Note(title = title, content = content)
-                saveLocal(note)
-            } else {
-                val note = Note(title = title, content = content, userId = authenticationService.currentUser.id)
-                saveRemote(note)
-            }
-        }
-    }
-
-    private suspend fun saveLocal(note: Note) {
+    private suspend fun save(note: Note) {
         noteRepository.insert(NoteEntity.from(note))
     }
 
-    private suspend fun saveRemote(note: Note) {
-        firestoreNoteRepository.insert(note)
+    fun create(title: String, content: String): Note {
+        return Note(title = title, content = content)
     }
 
     suspend fun update(note: Note) {
-        if(authenticationService.currentUser.isAnonymous) {
-            noteRepository.update(NoteEntity.from(note))
-        } else {
-            firestoreNoteRepository.update(note)
-        }
+        noteRepository.update(NoteEntity.from(note))
     }
 
     suspend fun delete(note: Note){
-        if(authenticationService.currentUser.isAnonymous) {
-            noteRepository.delete(NoteEntity.from(note))
-        } else {
-            firestoreNoteRepository.delete(note)
-        }
-    }
-
-    private suspend fun deleteLocal(note: Note){
         noteRepository.delete(NoteEntity.from(note))
     }
 
+    // TODO:
     suspend fun sync(cleanLocal: Boolean = false){
-        val notesLocal = getAllLocal()
-        if(notesLocal.isNotEmpty()){
-            for (note in notesLocal){
-                saveRemote(note.copy(userId = authenticationService.currentUser.id))
-                if(cleanLocal){
-                    deleteLocal(note)
-                }
-            }
+        val notes = getAll()
+        if(notes.isNotEmpty()){
+//            for (note in notesLocal){
+//                saveRemote(note.copy(userId = authenticationService.currentUser.id))
+//                if(cleanLocal){
+//                    deleteLocal(note)
+//                }
+//            }
         }
     }
 
