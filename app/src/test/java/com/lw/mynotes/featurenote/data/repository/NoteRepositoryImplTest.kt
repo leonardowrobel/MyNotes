@@ -2,10 +2,12 @@ package com.lw.mynotes.featurenote.data.repository
 
 import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
+import io.mockk.coEvery
+import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
 
-// TODO: wip
+// TODO(wip)
 class NoteRepositoryImplTest {
 
     private lateinit var notesRepository: NotesRepository
@@ -13,13 +15,14 @@ class NoteRepositoryImplTest {
 
     @Before
     fun setUp() {
-        notesDao // Mock
-//        notesRepository = NotesRepositoryImpl()
+        notesDao = mockk<NotesDao>()
         TODO("Not yet implemented")
+//        notesRepository = NotesRepositoryImpl()
     }
 
     @Test
     fun getAll() {
+//        coEvery { notesDao.getAll() } returns
     }
 
     @Test

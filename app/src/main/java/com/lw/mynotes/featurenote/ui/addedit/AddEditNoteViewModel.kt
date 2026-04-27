@@ -88,7 +88,8 @@ class AddEditNoteViewModel @Inject constructor(
     fun create(){
         Log.d(TAG, "create()")
         viewModelScope.launch {
-            notesService.createAndSave(_uiState.value.title, _uiState.value.content)
+            // FIX-ME
+//            notesService.create(_uiState.value.title, _uiState.value.content)
             _uiState.update { it.copy(message = "Criação de nota concluída.") }
             _navigationEvents.send(NavigationEvent.NavigateToMain())
         }
