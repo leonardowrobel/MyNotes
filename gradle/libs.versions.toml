@@ -1,14 +1,15 @@
 [versions]
 agp = "8.13.0"
-kotlin = "2.0.21"
+kotlin = "2.2.0"
 coreKtx = "1.17.0"
+kotlinCoTest = "1.10.2"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.3"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
-ksp = "2.0.21-1.0.27"
+ksp = "2.3.7"
 room = "2.7.2"
 truth = "1.0.1"
 arch = "1.0.0"
@@ -60,6 +61,7 @@ androidx-navigation-testing = { group = "androidx.navigation", name = "navigatio
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials"}
 androidx-credentials-play = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials"}
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jsonSerialization" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinCoTest" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]
