@@ -1,7 +1,8 @@
-package com.lw.mynotes.featurenote.data
+package com.lw.mynotes.featurenote
 
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 
+// TODO: move this to some sort of sharedTest location
 class NotesTestingUtils {
 
     private val titleSamples = listOf<String>(
@@ -45,8 +46,16 @@ class NotesTestingUtils {
 
     fun createNoteEntity(): NoteEntity {
         return NoteEntity(
-            title = titleSamples[(0.. (titleSamples.size - 1)).random()],
-            content = contentSamples[(0.. (contentSamples.size - 1)).random()]
+            title = titleSamples[(0..(titleSamples.size - 1)).random()],
+            content = contentSamples[(0..(contentSamples.size - 1)).random()]
+        )
+    }
+
+    fun createNoteEntityWithId(): NoteEntity {
+        return NoteEntity(
+            id = ((0..999).random()).toLong(),
+            title = titleSamples[(0..(titleSamples.size - 1)).random()],
+            content = contentSamples[(0..(contentSamples.size - 1)).random()]
         )
     }
 
