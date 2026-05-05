@@ -13,7 +13,7 @@ import org.junit.Test
 // TODO(wip)
 class NoteRepositoryImplTest {
 
-    private val notesQtd = 10
+    private val allNotesQtd = 11
 
     private val notesTestingUtils = NotesTestingUtils()
 
@@ -29,7 +29,14 @@ class NoteRepositoryImplTest {
 
     @Test
     fun getAll() {
-//        coEvery { notesDao.getAll() } returns notesTestingUtils.createNoteEntities(notesQtd)
+        val mockAllNotes = notesTestingUtils.createNoteEntities(allNotesQtd)
+        coEvery { notesDao.getAll() } returns mockAllNotes
+
+        val actualAllNotes = runBlocking {
+            notesRepository.getAll()
+        }
+
+        assert(mockAllNotes == actualAllNotes)
     }
 
     @Test
