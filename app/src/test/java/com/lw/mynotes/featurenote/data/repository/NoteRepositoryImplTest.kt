@@ -16,7 +16,6 @@ import org.junit.Test
 class NoteRepositoryImplTest {
 
     private val allNotesQtd = (11..99).random()
-
     private val notesTestingUtils = NotesTestingUtils()
 
     private lateinit var notesRepository: NotesRepository
@@ -31,7 +30,7 @@ class NoteRepositoryImplTest {
 
     // Basic functions/cases
     @Test
-    fun get_all_notes() {
+    fun getAllNotes() {
         val mockAllNotes = notesTestingUtils.createNoteEntities(allNotesQtd)
         coEvery { notesDao.getAll() } returns mockAllNotes
 
@@ -43,7 +42,7 @@ class NoteRepositoryImplTest {
     }
 
     @Test
-    fun get_note() {
+    fun getNote() {
         val mockNoteEntity = notesTestingUtils.createNoteEntityWithId()
         coEvery { notesDao.get(ofType<Long>()) } returns mockNoteEntity
 
@@ -55,7 +54,7 @@ class NoteRepositoryImplTest {
     }
 
     @Test
-    fun insert_note_then_get_it() {
+    fun insertNote_getIt() {
         val mockNoteEntity = notesTestingUtils.createNoteEntity()
         val mockNoteEntityId = ((0..999).random()).toLong()
         coEvery { notesDao.insert(ofType<NoteEntity>()) } returns mockNoteEntityId
@@ -74,7 +73,7 @@ class NoteRepositoryImplTest {
     }
 
     @Test
-    fun update_note_verify_if_calls_dao_update() {
+    fun updateNote_verify_daoUpdateCall() {
         val mockNoteEntity = notesTestingUtils.createNoteEntityWithId()
         coEvery { notesRepository.update(ofType<NoteEntity>()) } returns Unit
 
@@ -86,7 +85,7 @@ class NoteRepositoryImplTest {
     }
 
     @Test
-    fun delete() {
+    fun deleteNote_verify_daoDeleteCall() {
         val mockNoteEntity = notesTestingUtils.createNoteEntityWithId()
         coEvery { notesRepository.delete(ofType<NoteEntity>()) } returns Unit
 
