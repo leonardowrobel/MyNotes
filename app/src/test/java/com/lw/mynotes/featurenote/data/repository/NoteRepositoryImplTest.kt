@@ -6,6 +6,7 @@ import com.lw.mynotes.featurenote.data.model.NoteEntity
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -68,15 +69,31 @@ class NoteRepositoryImplTest {
             notesRepository.get(actualNoteEntityId)
         } ?: throw IllegalStateException("Get operation returned null")
 
-        assert(mockNoteEntity == actualNoteEntity)
+        assert(mockNoteEntity.copy(id = mockNoteEntityId) == actualNoteEntity)
         assert(mockNoteEntityId == actualNoteEntityId)
     }
 
-//    @Test
-//    fun update() {
-//    }
+    @Test
+    fun update_note_verify_if_calls_dao_update() {
+        val mockNoteEntity = notesTestingUtils.createNoteEntityWithId()
+        coEvery { notesRepository.update(ofType<NoteEntity>()) } returns Unit
 
-//    @Test
-//    fun delete() {
-//    }
+        runBlocking {
+            notesRepository.update(mockNoteEntity)
+        }
+
+        coVerify { notesDao.update(ofType<NoteEntity>()) }
+    }
+
+    @Test
+    fun delete() {
+        val mockNoteEntity = notesTestingUtils.createNoteEntityWithId()
+        coEvery { notesRepository.delete(ofType<NoteEntity>()) } returns Unit
+
+        runBlocking {
+            notesRepository.delete(mockNoteEntity)
+        }
+
+        coVerify { notesDao.delete(ofType<NoteEntity>()) }
+    }
 }
