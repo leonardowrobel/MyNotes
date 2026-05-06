@@ -1,6 +1,7 @@
 package com.lw.mynotes.featurenote
 
 import com.lw.mynotes.featurenote.data.model.NoteEntity
+import com.lw.mynotes.featurenote.domain.model.Note
 
 // TODO: move this to some sort of sharedTest location
 class NotesTestingUtils {
@@ -44,10 +45,16 @@ class NotesTestingUtils {
         ""
     )
 
+    private val userIdSample = listOf<String>(
+        "DxTGFAAHGsYhGs25kkol5FKwOpo2",
+        "UdGHFAALMdOhHs63ssrf9GDfLsg8"
+    )
+
     fun createNoteEntity(): NoteEntity {
         return NoteEntity(
             title = titleSamples[(0..(titleSamples.size - 1)).random()],
-            content = contentSamples[(0..(contentSamples.size - 1)).random()]
+            content = contentSamples[(0..(contentSamples.size - 1)).random()],
+            userId = userIdSample[(0..(userIdSample.size - 1)).random()]
         )
     }
 
@@ -55,15 +62,31 @@ class NotesTestingUtils {
         return NoteEntity(
             id = ((0..999).random()).toLong(),
             title = titleSamples[(0..(titleSamples.size - 1)).random()],
-            content = contentSamples[(0..(contentSamples.size - 1)).random()]
+            content = contentSamples[(0..(contentSamples.size - 1)).random()],
+            userId = userIdSample[(0..(userIdSample.size - 1)).random()]
         )
     }
 
     fun createNoteEntities(qtd: Int = 1): List<NoteEntity> {
-        val notes = mutableListOf<NoteEntity>()
+        val noteEntities = mutableListOf<NoteEntity>()
         for (i in 1..qtd){
-            notes.add(createNoteEntity())
+            noteEntities.add(createNoteEntity())
         }
-        return notes
+        return noteEntities
+    }
+
+    fun createNote(): Note {
+        return Note(
+            title = titleSamples[(0..(titleSamples.size - 1)).random()],
+            content = contentSamples[(0..(contentSamples.size - 1)).random()]
+        )
+    }
+
+    fun getRandomTitle(): String {
+        return titleSamples[(0..(titleSamples.size - 1)).random()]
+    }
+
+    fun getRandomContent(): String {
+        return contentSamples[(0..(contentSamples.size - 1)).random()]
     }
 }
