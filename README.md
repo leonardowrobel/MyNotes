@@ -22,7 +22,18 @@ Some of the technologies and tools used:
 * [EasyAppIcon](https://easyappicon.com/)
 * [UxWing](https://uxwing.com/)
 * [Coolors](https://coolors.co/)
+
   ---  
 App Distribution
 
-./gradlew assembleDevelopment appDistributionUploadDevelopment
+run:
+`./gradlew assembleDevelopment appDistributionUploadDevelopment`
+
+ ---
+Test Reports for Development variant
+for Unit Tests run:
+`./gradlew :app:createDevelopmentUnitTestCoverageReport`
+- Report location -> path-to-your-project/module-name/build/reports/coverage/test/variant/index.html
+for Instrumented Tests run:
+`./gradlew :module-name:createDevelopmentAndroidTestCoverageReport`
+- Report location -> path-to-your-project/module-name/build/reports/coverage/androidTest/variant/connected/index.html

@@ -46,6 +46,8 @@ android {
             isMinifyEnabled = false
             isDebuggable = true
             versionNameSuffix = "-dev"
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
             buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
             firebaseAppDistribution {
                 artifactType = "APK"
