@@ -51,7 +51,7 @@ class NotesServiceTest {
     }
 
     @Test
-    fun save_verify_result(){
+    fun create_verify_result(){
         val mockTitle = notesTestingUtils.getRandomTitle()
         val mockContent = notesTestingUtils.getRandomContent()
 
