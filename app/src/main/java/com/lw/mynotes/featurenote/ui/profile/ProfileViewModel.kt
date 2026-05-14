@@ -113,7 +113,7 @@ class ProfileViewModel @Inject constructor(
 
     fun syncNotes(deleteLocal: Boolean){
         viewModelScope.launch {
-            notesService.sync(deleteLocal)
+            notesService.sync()
             _uiState.update { it.copy(showDialog = false) }
         }
     }

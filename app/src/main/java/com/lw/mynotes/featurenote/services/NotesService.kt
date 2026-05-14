@@ -26,6 +26,10 @@ class NotesService @Inject constructor(
         return Note(title = title, content = content)
     }
 
+    suspend fun createAndSave(title: String, content: String){
+        this.save(this.create(title, content))
+    }
+
     suspend fun update(note: Note) {
         notesRepository.update(NoteEntity.from(note))
     }
@@ -35,7 +39,7 @@ class NotesService @Inject constructor(
     }
 
     // TODO:
-    suspend fun sync(cleanLocal: Boolean = false){
+    suspend fun sync(){
         val notes = getAll()
         if(notes.isNotEmpty()){
 //            for (note in notesLocal){

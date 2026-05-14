@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.services.NotesService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -88,8 +87,7 @@ class AddEditNoteViewModel @Inject constructor(
     fun create(){
         Log.d(TAG, "create()")
         viewModelScope.launch {
-            // FIX-ME
-//            notesService.create(_uiState.value.title, _uiState.value.content)
+            notesService.createAndSave(_uiState.value.title, _uiState.value.content)
             _uiState.update { it.copy(message = "Criação de nota concluída.") }
             _navigationEvents.send(NavigationEvent.NavigateToMain())
         }
