@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:name=".MyNotesApplication"
         android:allowBackup="true"
@@ -24,10 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--            android:description="TODO"-->
-        <service
-            android:exported="false"
-            android:name=".featurenote.services.SyncNotesService" />
     </application>
 
 </manifest>
