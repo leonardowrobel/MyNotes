@@ -24,8 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--            android:description="TODO"-->
         <service
-            android:description="TODO"
             android:exported="false"
             android:name=".featurenote.services.SyncNotesService" />
     </application>
