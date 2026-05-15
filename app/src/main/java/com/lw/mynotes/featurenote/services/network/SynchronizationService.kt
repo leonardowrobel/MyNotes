@@ -1,5 +1,9 @@
 package com.lw.mynotes.featurenote.services.network
 
-class SynchronizationService{
+import javax.inject.Inject
 
+class SynchronizationService @Inject constructor(
+    observer: NetworkConnectivityObserver
+){
+    val isConnected = observer.observe()
 }

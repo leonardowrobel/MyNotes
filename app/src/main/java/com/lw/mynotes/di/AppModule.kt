@@ -1,6 +1,7 @@
 package com.lw.mynotes.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.google.firebase.firestore.FirebaseFirestore
 import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
@@ -9,9 +10,12 @@ import com.lw.mynotes.featurenote.data.repository.NotesRepositoryImpl
 import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import com.lw.mynotes.featurenote.services.AuthenticationService
+import com.lw.mynotes.featurenote.services.network.NetworkConnectivityObserver
+import com.lw.mynotes.featurenote.services.network.SynchronizationService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -31,15 +35,29 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesNoteRepository(db: MyNotesDatabase): NotesRepository{
+    fun providesNoteRepository(db: MyNotesDatabase): NotesRepository {
         return NotesRepositoryImpl(db.notesDao)
     }
 
     @Provides
     @Singleton
-    fun providesFirebaseNoteRepository(): FirestoreNoteRepository{
+    fun providesFirebaseNoteRepository(): FirestoreNoteRepository {
         val db = FirebaseFirestore.getInstance()
         return FirestoreNoteRepositoryImpl(db)
+    }
+
+    @Provides
+    @Singleton
+    fun providesNetworkConnectivityObserver(@ApplicationContext appContext: Context): NetworkConnectivityObserver {
+        return NetworkConnectivityObserver(appContext)
+    }
+
+    @Provides
+    @Singleton
+    fun providesSynchronizationService(
+        networkConnectivityObserver: NetworkConnectivityObserver
+    ): SynchronizationService {
+        return SynchronizationService(networkConnectivityObserver)
     }
 
     @Provides

@@ -38,19 +38,6 @@ class NotesService @Inject constructor(
         notesRepository.delete(NoteEntity.from(note))
     }
 
-    // TODO:
-    suspend fun sync(){
-        val notes = getAll()
-        if(notes.isNotEmpty()){
-//            for (note in notesLocal){
-//                saveRemote(note.copy(userId = authenticationService.currentUser.id))
-//                if(cleanLocal){
-//                    deleteLocal(note)
-//                }
-//            }
-        }
-    }
-
     companion object {
         const val TAG = "NOTES_SERV"
     }
