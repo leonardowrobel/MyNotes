@@ -15,7 +15,8 @@ class NetworkMonitor(context: Context) {
         val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
         return (
                 capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                        && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) // Without it, a phone connected to a WiFi router (no internet) will still return true.
+                        // Without this, a phone connected to a WiFi router (no internet) will still return true.
+                        && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                 )
     }
 
