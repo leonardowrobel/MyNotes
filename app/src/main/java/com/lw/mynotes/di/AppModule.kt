@@ -10,7 +10,7 @@ import com.lw.mynotes.featurenote.data.repository.NotesRepositoryImpl
 import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import com.lw.mynotes.featurenote.services.AuthenticationService
-import com.lw.mynotes.featurenote.services.network.NetworkConnectivityObserver
+import com.lw.mynotes.featurenote.services.network.ConnectivityRepository
 import com.lw.mynotes.featurenote.services.network.SynchronizationService
 import dagger.Module
 import dagger.Provides
@@ -48,16 +48,16 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesNetworkConnectivityObserver(@ApplicationContext appContext: Context): NetworkConnectivityObserver {
-        return NetworkConnectivityObserver(appContext)
+    fun providesNetworkConnectivityObserver(@ApplicationContext appContext: Context): ConnectivityRepository {
+        return ConnectivityRepository(appContext)
     }
 
     @Provides
     @Singleton
     fun providesSynchronizationService(
-        networkConnectivityObserver: NetworkConnectivityObserver
+        connectivityRepository: ConnectivityRepository
     ): SynchronizationService {
-        return SynchronizationService(networkConnectivityObserver)
+        return SynchronizationService(connectivityRepository)
     }
 
     @Provides

@@ -64,17 +64,17 @@ class ProfileViewModel @Inject constructor(
     val isConnected: StateFlow<ConnectivityObserver.Status> = _isConnected.asStateFlow()
 
     init {
+        synchronizationService.startService()
         viewModelScope.launch {
             authenticationService.currentUserFlow.collect { user ->
                 if (user != null) {
                     _user.value = user
                 }
             }
-            synchronizationService.isConnected.collect { status ->
-//            observer.observe()
-//                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-//                .collect { status ->
-                _isConnected.value = status
+            // TODO: FIX-ME - the value is getting updated at repo, but not here
+            synchronizationService.connectionStatus.collect { connectionStatus ->
+                Log.d(TAG, "connectionStatus: " + connectionStatus.name)
+                _isConnected.value = connectionStatus
             }
         }
     }
