@@ -1,19 +1,31 @@
 package com.lw.mynotes.featurenote.services.network
 
 import android.util.Log
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SynchronizationService @Inject constructor(
+    scope: CoroutineScope,
     val connectivityRepository: ConnectivityRepository,
 ){
-    lateinit var isConnected: Flow<Boolean>
-    lateinit var connectionStatus: Flow<ConnectivityObserver.Status>
+    var isConnected = connectivityRepository.isConnected
+//    lateinit var connectionStatus: StateFlow<ConnectivityObserver.Status>
 
-    fun startService() {
-        Log.d(TAG, "startService")
-        connectionStatus =  connectivityRepository.connectionStatus
-        isConnected = connectivityRepository.isConnected
+    private val _connectionStatus = MutableStateFlow(ConnectivityObserver.Status.UNAVAILABLE)
+    val connectionStatus: StateFlow<ConnectivityObserver.Status> = _connectionStatus
+
+    init {
+        scope.launch {
+            connectivityRepository.connectionStatus.collect{ status ->
+                _connectionStatus.update {
+                    status
+                }
+            }
+        }
     }
 
     companion object {

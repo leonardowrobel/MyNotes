@@ -61,20 +61,21 @@ class ProfileViewModel @Inject constructor(
 
     // DEBUG
     private val _isConnected = MutableStateFlow(ConnectivityObserver.Status.UNAVAILABLE)
-    val isConnected: StateFlow<ConnectivityObserver.Status> = _isConnected.asStateFlow()
+    val isConnected: StateFlow<ConnectivityObserver.Status> = _isConnected
 
     init {
-        synchronizationService.startService()
         viewModelScope.launch {
+            Log.d(TAG, "viewModelScope.launch")
             authenticationService.currentUserFlow.collect { user ->
                 if (user != null) {
                     _user.value = user
                 }
             }
-            // TODO: FIX-ME - the value is getting updated at repo, but not here
-            synchronizationService.connectionStatus.collect { connectionStatus ->
-                Log.d(TAG, "connectionStatus: " + connectionStatus.name)
-                _isConnected.value = connectionStatus
+        }
+        viewModelScope.launch {
+            synchronizationService.connectionStatus.collect { status ->
+                Log.d(TAG, "status: $status")
+                _isConnected.tryEmit(status)
             }
         }
     }

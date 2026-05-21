@@ -9,6 +9,7 @@ import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 
 class ConnectivityRepository(
@@ -32,17 +33,15 @@ class ConnectivityRepository(
     val isConnected: Flow<Boolean> = _isConnected
 
     private val _connectionStatus = MutableStateFlow(ConnectivityObserver.Status.UNAVAILABLE)
-    val connectionStatus: Flow<ConnectivityObserver.Status> = _connectionStatus
+    val connectionStatus: StateFlow<ConnectivityObserver.Status> = _connectionStatus
 
     val networkCallback = object : ConnectivityManager.NetworkCallback(){
         override fun onAvailable(network: Network) {
-            Log.d(TAG, "AVAILABLE")
             super.onAvailable(network)
             _isConnected.value = true
             _connectionStatus.value = ConnectivityObserver.Status.AVAILABLE
         }
         override fun onLost(network: Network) {
-            Log.d(TAG, "LOST")
             super.onLost(network)
             _isConnected.value = false
             _connectionStatus.value = ConnectivityObserver.Status.LOST
@@ -62,7 +61,7 @@ class ConnectivityRepository(
     // TODO: FIX-ME - call register and assure the callback is been called
     override fun observe(): Flow<ConnectivityObserver.Status> = callbackFlow {
         Log.d(TAG, "observe()")
-
+        connectivityManager.registerDefaultNetworkCallback(networkCallback)
         awaitClose {
             Log.d(TAG, "awaitClose")
             connectivityManager.unregisterNetworkCallback(networkCallback)
