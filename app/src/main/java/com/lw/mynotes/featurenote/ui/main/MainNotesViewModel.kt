@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.services.NotesService
+import com.lw.mynotes.featurenote.services.network.NetworkConnectivityService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -27,6 +27,7 @@ data class MainNotesUiState(
 @HiltViewModel
 class MainNotesViewModel @Inject constructor(
     private val notesService: NotesService,
+    private val networkConnectivityService: NetworkConnectivityService
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(MainNotesUiState())
@@ -35,11 +36,16 @@ class MainNotesViewModel @Inject constructor(
     private val _navigationEvents = Channel<NavigationEvent>()
     val navigationEvents = _navigationEvents.receiveAsFlow()
 
-    var test: String = ""
+    private val _isConnected = MutableStateFlow(false)
+    val isConnected: StateFlow<Boolean> = _isConnected
 
     init {
         getNotes()
-//        test = BuildConfig.TEST
+        viewModelScope.launch {
+            networkConnectivityService.isConnected.collect { status ->
+                _isConnected.tryEmit(status)
+            }
+        }
     }
 
     fun getNotes() {

@@ -29,4 +29,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    companion object {
+        const val TAG = "MAIN_ACTIVITY"
+    }
 }

@@ -169,8 +169,6 @@ fun ProfileScreen(
                             Text("Welcome back, " + user.displayName + ".")
                         }
                         Spacer(modifier = Modifier.size(12.dp))
-                        // DEBUG
-                        Text("CONNECTION STATUS: " + (viewModel.isConnected.collectAsState().value))
                     }
                 }
             }

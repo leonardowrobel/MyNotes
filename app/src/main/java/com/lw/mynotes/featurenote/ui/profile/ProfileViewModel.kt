@@ -1,7 +1,6 @@
 package com.lw.mynotes.featurenote.ui.profile
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.credentials.Credential
 import androidx.credentials.CustomCredential
 import androidx.lifecycle.ViewModel
@@ -11,18 +10,13 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Co
 import com.lw.mynotes.featurenote.data.model.User
 import com.lw.mynotes.featurenote.services.AuthenticationService
 import com.lw.mynotes.featurenote.services.NotesService
-import com.lw.mynotes.featurenote.services.network.ConnectivityObserver
-import com.lw.mynotes.featurenote.services.network.SynchronizationService
+import com.lw.mynotes.featurenote.services.network.NetworkConnectivityService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -47,7 +41,7 @@ data class ProfileUiState(
 class ProfileViewModel @Inject constructor(
     private val authenticationService: AuthenticationService,
     private val notesService: NotesService,
-    private val synchronizationService: SynchronizationService
+    private val networkConnectivityService: NetworkConnectivityService
 ): ViewModel() {
     
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -59,9 +53,8 @@ class ProfileViewModel @Inject constructor(
     private val _user = MutableStateFlow(User())
     val user: StateFlow<User> = _user.asStateFlow()
 
-    // DEBUG
-    private val _isConnected = MutableStateFlow(ConnectivityObserver.Status.UNAVAILABLE)
-    val isConnected: StateFlow<ConnectivityObserver.Status> = _isConnected
+    private val _isConnected = MutableStateFlow(false)
+    val isConnected: StateFlow<Boolean> = _isConnected
 
     init {
         viewModelScope.launch {
@@ -73,8 +66,7 @@ class ProfileViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            synchronizationService.connectionStatus.collect { status ->
-                Log.d(TAG, "status: $status")
+            networkConnectivityService.isConnected.collect { status ->
                 _isConnected.tryEmit(status)
             }
         }

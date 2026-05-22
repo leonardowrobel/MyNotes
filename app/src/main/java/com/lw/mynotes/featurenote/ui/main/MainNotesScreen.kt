@@ -1,5 +1,6 @@
 package com.lw.mynotes.featurenote.ui.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -35,8 +37,13 @@ import androidx.navigation.NavController
 import com.lw.mynotes.featurenote.ui.components.Fab
 import com.lw.mynotes.featurenote.ui.util.NavigationItem
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.zIndex
+import com.lw.mynotes.R
 import com.lw.mynotes.featurenote.ui.components.NoteCard
+import com.lw.mynotes.ui.theme.PunchRed
 
 // TODO: Organize design/theme systems
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +76,24 @@ fun MainNotesScreen (
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }, actions = {
+                    if(!viewModel.isConnected.collectAsState().value){
+                        Box(
+                            modifier = Modifier
+                                .zIndex(1f)
+                                .offset(x = 30.dp, y = 10.dp)
+                                .size(25.dp)
+                                .background(MaterialTheme.colorScheme.surface, shape = CircleShape),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Icon(
+                                modifier = Modifier
+                                    .size(15.dp),
+                                painter = painterResource(id = R.drawable.ic_offline),
+                                contentDescription = "Offline",
+                                tint = PunchRed
+                            )
+                        }
+                    }
                     IconButton(
                         modifier = Modifier
                             .padding(horizontal = 18.dp, vertical = 10.dp)
