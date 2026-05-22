@@ -38,38 +38,33 @@ class ConnectivityRepository(
     val networkCallback = object : ConnectivityManager.NetworkCallback(){
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            _isConnected.value = true
-            _connectionStatus.value = ConnectivityObserver.Status.AVAILABLE
+            _isConnected.tryEmit(true)
+            _connectionStatus.tryEmit(ConnectivityObserver.Status.AVAILABLE)
         }
         override fun onLost(network: Network) {
             super.onLost(network)
-            _isConnected.value = false
-            _connectionStatus.value = ConnectivityObserver.Status.LOST
+            _isConnected.tryEmit(false)
+            _connectionStatus.tryEmit(ConnectivityObserver.Status.LOST)
         }
-//        override fun onLosing(network: Network, maxMsToLive: Int) {
-//            super.onLosing(network, maxMsToLive)
-//            Log.d(TAG, "trySend LOSING")
-//            trySend(ConnectivityObserver.Status.LOSING)
-//        }
-//        override fun onUnavailable() {
-//            super.onUnavailable()
-//            Log.d(TAG, "trySend UNAVAILABLE")
-//            trySend(ConnectivityObserver.Status.UNAVAILABLE)
-//        }
+        override fun onLosing(network: Network, maxMsToLive: Int) {
+            super.onLosing(network, maxMsToLive)
+            _isConnected.tryEmit(false)
+            _connectionStatus.tryEmit(ConnectivityObserver.Status.LOSING)
+        }
+        override fun onUnavailable() {
+            super.onUnavailable()
+            _isConnected.tryEmit(false)
+            _connectionStatus.tryEmit(ConnectivityObserver.Status.UNAVAILABLE)
+        }
     }
 
-    // TODO: FIX-ME - call register and assure the callback is been called
-    override fun observe(): Flow<ConnectivityObserver.Status> = callbackFlow {
-        Log.d(TAG, "observe()")
-        connectivityManager.registerDefaultNetworkCallback(networkCallback)
-        awaitClose {
-            Log.d(TAG, "awaitClose")
+    override fun observe() {
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+    }
+
+    // TODO: find some way to programmatically call this properly
+    override fun stopObserving() {
             connectivityManager.unregisterNetworkCallback(networkCallback)
-        }
-    }
-
-    init {
-        connectivityManager.registerDefaultNetworkCallback(networkCallback)
     }
 
     companion object {
