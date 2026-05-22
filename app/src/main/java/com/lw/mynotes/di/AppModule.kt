@@ -26,6 +26,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    // APP DB --------------------------------------------------------------------------------------
     @Provides
     @Singleton
     fun providesAppDatabase(app: Application): MyNotesDatabase{
@@ -36,6 +37,7 @@ object AppModule {
         ).build()
     }
 
+    // Repositories --------------------------------------------------------------------------------
     @Provides
     @Singleton
     fun providesNoteRepository(db: MyNotesDatabase): NotesRepository {
@@ -49,12 +51,7 @@ object AppModule {
         return FirestoreNoteRepositoryImpl(db)
     }
 
-    @Provides
-    @Singleton
-    fun providesNetworkConnectivityObserver(@ApplicationContext appContext: Context): ConnectivityRepository {
-        return ConnectivityRepository(appContext)
-    }
-
+    // Services ------------------------------------------------------------------------------------
     @Provides
     @Singleton
     fun providesSynchronizationService(
@@ -70,7 +67,14 @@ object AppModule {
         return AuthenticationService()
     }
 
+    // Other ---------------------------------------------------------------------------------------
+    @Provides
+    @Singleton
+    fun providesConnectivityObserver(@ApplicationContext appContext: Context): ConnectivityRepository {
+        return ConnectivityRepository(appContext)
+    }
 
+    // TODO: review this and assure this is the best context
     @Singleton
     @Provides
     fun providesCoroutineScope(): CoroutineScope {
