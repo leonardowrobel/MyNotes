@@ -30,11 +30,16 @@ import com.lw.mynotes.R
 import kotlinx.coroutines.launch
 
 @Composable
-fun AuthenticationButton(buttonText: Int, onRequestResult: (Credential) -> Unit) {
+fun AuthenticationButton(
+    buttonText: Int,
+    onRequestResult: (Credential) -> Unit,
+    enabled: Boolean = true
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     Button(
+        enabled = enabled,
         onClick = { coroutineScope.launch { launchCredManButtonUI(context, onRequestResult) } },
 //        colors = ButtonDefaults.buttonColors(containerColor = Purple40),
         modifier = Modifier

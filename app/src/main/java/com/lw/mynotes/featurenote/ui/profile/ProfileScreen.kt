@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,6 +37,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.DialogProperties
 import com.lw.mynotes.featurenote.data.model.User
+import com.lw.mynotes.featurenote.ui.components.icons.ExitIcon
+import com.lw.mynotes.featurenote.ui.components.icons.OfflineIcon
 
 // TODO: Organize design/theme systems
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,26 +108,19 @@ fun ProfileScreen(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimary)
                 }, actions = {
-                    if(!user.isAnonymous){
-                        IconButton(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .padding(horizontal = 18.dp, vertical = 10.dp),
-                            onClick =  { viewModel.onSignOut() }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.ExitToApp,
-                                contentDescription = "Profile",
-                                tint = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
+                    if(!viewModel.isConnected.collectAsState().value) {
+                        OfflineIcon()
                     }
+                    if(!user.isAnonymous){
+                        ExitIcon { viewModel.onSignOut() }
+                    }
+                    Spacer(modifier = Modifier.fillMaxHeight().width(18.dp))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Voltar",
+                            contentDescription = "Go back",
                             tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
@@ -137,9 +132,11 @@ fun ProfileScreen(
                 modifier = Modifier.padding(12.dp, 0.dp, 12.dp, 12.dp),
                 actions = {
                     if(user.isAnonymous){
-                        AuthenticationButton(buttonText = R.string.sign_in_with_google) { credential ->
-                            viewModel.onSignInWithGoogle(credential)
-                        }
+                        AuthenticationButton(
+                            enabled = viewModel.isConnected.collectAsState().value,
+                            buttonText = R.string.sign_in_with_google,
+                            onRequestResult = { credential -> viewModel.onSignInWithGoogle(credential) }
+                        )
                     }
                 }, containerColor = MaterialTheme.colorScheme.surface
             )
