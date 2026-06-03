@@ -11,6 +11,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 // FIX-ME
+// TODO: fix the Firestore Rules
 class FirestoreNoteRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ): FirestoreNoteRepository {
