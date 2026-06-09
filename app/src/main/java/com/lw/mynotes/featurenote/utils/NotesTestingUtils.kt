@@ -1,4 +1,4 @@
-package com.lw.mynotes.featurenote
+package com.lw.mynotes.featurenote.utils
 
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 import com.lw.mynotes.featurenote.domain.model.Note

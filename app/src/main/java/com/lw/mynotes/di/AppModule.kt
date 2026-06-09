@@ -10,6 +10,7 @@ import com.lw.mynotes.featurenote.data.repository.NotesRepositoryImpl
 import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import com.lw.mynotes.featurenote.services.AuthenticationService
+import com.lw.mynotes.featurenote.services.SynchronizationService
 import com.lw.mynotes.featurenote.services.network.ConnectivityRepository
 import com.lw.mynotes.featurenote.services.network.NetworkConnectivityService
 import dagger.Module
@@ -34,7 +35,7 @@ object AppModule {
             app,
             MyNotesDatabase::class.java,
             MyNotesDatabase.DATABASE_NAME
-        ).build()
+        ).fallbackToDestructiveMigration(true).build() // TODO: check this
     }
 
     // Repositories --------------------------------------------------------------------------------
@@ -65,6 +66,16 @@ object AppModule {
     @Singleton
     fun providesAuthenticationService(): AuthenticationService {
         return AuthenticationService()
+    }
+
+    @Provides
+    @Singleton
+    fun providesSynchronizationService(
+        firestoreNoteRepository: FirestoreNoteRepository,
+        networkConnectivityService: NetworkConnectivityService,
+        scope: CoroutineScope
+    ): SynchronizationService {
+        return SynchronizationService(firestoreNoteRepository, networkConnectivityService, scope)
     }
 
     // Other ---------------------------------------------------------------------------------------

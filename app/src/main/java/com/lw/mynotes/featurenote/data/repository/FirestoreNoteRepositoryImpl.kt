@@ -28,27 +28,28 @@ class FirestoreNoteRepositoryImpl @Inject constructor(
             .document(id).get().await().toObject()
     }
 
+    // TODO: FIX Firestore security RULES
     override suspend fun insert(note: Note){
-           Log.d(TAG, "insert()")
-           Log.d(TAG, "title: ${note.title}")
+       Log.d(TAG, "insert()")
        firestore.collection("notes").add(note)
            .addOnSuccessListener { documentReference ->
                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
 //               return@addOnSuccessListener documentReference.id.toLong()
            }
            .addOnFailureListener { e ->
-               Log.w(TAG, "Error adding document", e)
+               Log.e(TAG, "Error adding document", e)
+//               throw Exception(e.message)
            }
     }
 
     override suspend fun update(note: Note) {
-//        firestore.collection(NOTES_COLLECTION)
-//            .document(note.id).set(note).await()
+        firestore.collection(NOTES_COLLECTION)
+            .document(note.id.toString()).set(note).await()
     }
 
     override suspend fun delete(note: Note) {
-//        firestore.collection(NOTES_COLLECTION)
-//            .document(note.id).delete().await()
+        firestore.collection(NOTES_COLLECTION)
+            .document(note.id.toString()).delete().await()
     }
 
     companion object {

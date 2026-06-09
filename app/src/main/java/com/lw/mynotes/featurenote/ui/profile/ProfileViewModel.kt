@@ -10,6 +10,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Co
 import com.lw.mynotes.featurenote.data.model.User
 import com.lw.mynotes.featurenote.services.AuthenticationService
 import com.lw.mynotes.featurenote.services.NotesService
+import com.lw.mynotes.featurenote.services.SynchronizationService
 import com.lw.mynotes.featurenote.services.network.NetworkConnectivityService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -41,7 +42,8 @@ data class ProfileUiState(
 class ProfileViewModel @Inject constructor(
     private val authenticationService: AuthenticationService,
     private val notesService: NotesService,
-    private val networkConnectivityService: NetworkConnectivityService
+    private val networkConnectivityService: NetworkConnectivityService,
+    private val synchronizationService: SynchronizationService
 ): ViewModel() {
     
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -124,6 +126,11 @@ class ProfileViewModel @Inject constructor(
 
     fun syncNotes(deleteLocal: Boolean){
         viewModelScope.launch {
+            notesService.associateCurrentUserToLocalNotes()
+            val notes = notesService.getAll()
+            for(note in notes){
+                synchronizationService.sync(note)
+            }
 //            notesService.sync()
             _uiState.update { it.copy(showDialog = false) }
         }

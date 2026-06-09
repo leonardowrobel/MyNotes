@@ -16,12 +16,14 @@ data class NoteEntity(
     val createdAt: Long = System.currentTimeMillis(),
     @ColumnInfo(name = "updated_at")
     val updatedAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "last_sync_at")
+    val lastSyncAt: Long? = null,
     // TODO: implement soft delete
     @ColumnInfo(name = "deleted_at")
     val deletedAt: Long? = null
 ){
     companion object {
-        fun from(note: Note): NoteEntity{
+        fun from(note: Note): NoteEntity {
             return NoteEntity(
                 note.id,
                 note.userId,
@@ -29,11 +31,12 @@ data class NoteEntity(
                 note.content,
                 note.createdAt,
                 note.updatedAt,
-                note.deletedAt)
-        }
+                note.lastSyncAt,
+                note.deletedAt
+            )}
     }
 
     fun toNote(): Note {
-        return Note(id, userId, title, content, createdAt, updatedAt, deletedAt)
+        return Note(id, userId, title, content, createdAt, updatedAt, lastSyncAt, deletedAt)
     }
 }

@@ -6,9 +6,9 @@ import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import javax.inject.Inject
 
 class NotesService @Inject constructor(
-    val notesRepository: NotesRepository,
+    private val notesRepository: NotesRepository,
 //    val firestoreNoteRepository: FirestoreNoteRepository,
-//    val authenticationService: AuthenticationService
+    val authenticationService: AuthenticationService
 ) {
     suspend fun getAll(): List<Note> {
         return notesRepository.getAll().stream().map { it.toNote() }.toList()
@@ -36,6 +36,22 @@ class NotesService @Inject constructor(
 
     suspend fun delete(note: Note){
         notesRepository.delete(NoteEntity.from(note))
+    }
+
+    suspend fun associateCurrentUser(note: Note){
+        if(note.userId.isNotEmpty())
+            return
+        val noteToUpdate = note.copy(userId = authenticationService.currentUserId)
+        this.update(noteToUpdate)
+    }
+
+    suspend fun associateCurrentUserToLocalNotes(){
+        if(authenticationService.currentUser.isAnonymous)
+            return
+        val notes = this.getAll()
+        for(note in notes){
+            associateCurrentUser(note)
+        }
     }
 
     companion object {

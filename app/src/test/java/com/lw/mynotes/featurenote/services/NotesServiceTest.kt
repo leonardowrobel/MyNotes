@@ -1,6 +1,6 @@
 package com.lw.mynotes.featurenote.services
 
-import com.lw.mynotes.featurenote.NotesTestingUtils
+import com.lw.mynotes.featurenote.utils.NotesTestingUtils
 import com.lw.mynotes.featurenote.domain.model.Note
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import io.mockk.MockKAnnotations

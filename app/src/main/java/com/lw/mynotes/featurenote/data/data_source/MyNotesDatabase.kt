@@ -7,7 +7,7 @@ import com.lw.mynotes.featurenote.data.model.NoteEntity
 
 @Database(
     entities = [NoteEntity::class],
-    version = 4
+    version = 5
 )
 abstract class MyNotesDatabase: RoomDatabase() {
 

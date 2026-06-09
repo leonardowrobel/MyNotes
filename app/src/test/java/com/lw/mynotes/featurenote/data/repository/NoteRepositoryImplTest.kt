@@ -1,6 +1,6 @@
 package com.lw.mynotes.featurenote.data.repository
 
-import com.lw.mynotes.featurenote.NotesTestingUtils
+import com.lw.mynotes.featurenote.utils.NotesTestingUtils
 import com.lw.mynotes.featurenote.data.data_source.dao.NotesDao
 import com.lw.mynotes.featurenote.data.model.NoteEntity
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
