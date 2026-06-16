@@ -42,6 +42,9 @@ android {
 
     buildTypes {
         create("development"){
+            val localIp: String = gradleLocalProperties(rootDir, providers).getProperty("local.ip")
+            val localFirestoreEmulatorPort: String = gradleLocalProperties(rootDir, providers).getProperty("firebase.emulator.firestore.port")
+            val localAuthEmulatorPort: String = gradleLocalProperties(rootDir, providers).getProperty("firebase.emulator.auth.port")
             initWith(getByName("debug"))
             isMinifyEnabled = false
             isDebuggable = true
@@ -49,6 +52,10 @@ android {
             enableUnitTestCoverage = true
             enableAndroidTestCoverage = true
             buildConfigField("String", "GOOGLE_CLIENT_IP", googleClientId)
+            buildConfigField("String", "LOCAL_IP", localIp)
+            // TODO: verify if int type may be a better option
+            buildConfigField("String", "LOCAL_FIRESTORE_PORT", localFirestoreEmulatorPort)
+            buildConfigField("String", "LOCAL_AUTH_PORT", localAuthEmulatorPort)
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Development version"

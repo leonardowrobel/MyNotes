@@ -54,6 +54,8 @@ class NotesService @Inject constructor(
         }
     }
 
+    // TODO: dissociate current user method
+
     companion object {
         const val TAG = "NOTES_SERV"
     }

@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.lw.mynotes.BuildConfig
 import com.lw.mynotes.featurenote.data.model.User
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,12 @@ class AuthenticationService {
 //        .addCredentialOption(googleIdOption)
 //        .build()
 
+    init {
+        // TODO: Find out programmatically build config
+        val localIp = BuildConfig.LOCAL_IP
+        val localAuthPort = BuildConfig.LOCAL_AUTH_PORT
+        Firebase.auth.useEmulator(localIp, localAuthPort.toInt())
+    }
 
     val currentUserFlow: Flow<User?>
         get() = callbackFlow {
