@@ -36,6 +36,7 @@ data class ProfileUiState(
     val errorMessage: String = "",
     val message: String = "",
     val showDialog: Boolean = false,
+    val showSyncBtn: Boolean = false, // DEV
 )
 
 @HiltViewModel
@@ -60,7 +61,6 @@ class ProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            Log.d(TAG, "viewModelScope.launch")
             authenticationService.currentUserFlow.collect { user ->
                 if (user != null) {
                     _user.value = user
@@ -103,7 +103,8 @@ class ProfileViewModel @Inject constructor(
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 authenticationService.signInWithGoogle(googleIdTokenCredential.idToken)
-                _uiState.update { it.copy(showDialog = true) }
+                _uiState.update { it.copy(showSyncBtn = true) }
+//                _uiState.update { it.copy(showDialog = true) }
             } else {
                 Log.e(TAG, "UNEXPECTED_CREDENTIAL")
             }
@@ -121,18 +122,16 @@ class ProfileViewModel @Inject constructor(
     fun onSignOut() {
         viewModelScope.launch {
             authenticationService.signOut()
+            _uiState.update { it.copy(showSyncBtn = false) }
         }
     }
 
-    fun syncNotes(deleteLocal: Boolean){
+    fun syncNotes(){
         viewModelScope.launch {
-            notesService.associateCurrentUserToLocalNotes()
-            val notes = notesService.getAll()
-            for(note in notes){
-                synchronizationService.sync(note)
-            }
-//            notesService.sync()
-            _uiState.update { it.copy(showDialog = false) }
+            // TODO: Exception Handling
+            notesService.sync()
+//            _uiState.update { it.copy(showDialog = false) }
+//            _uiState.update { it.copy(showSyncBtn = false) }
         }
     }
 

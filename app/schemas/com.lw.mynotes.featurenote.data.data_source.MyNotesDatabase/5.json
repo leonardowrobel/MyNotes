@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "52369bf0d007e98259a02b4200dbffa7",
+    "identityHash": "d791d42eaba28f8a4c517ca3b85df8ce",
     "entities": [
       {
         "tableName": "notes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `last_sync_at` INTEGER, `deleted_at` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `deleted_at` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -45,11 +45,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "lastSyncAt",
-            "columnName": "last_sync_at",
-            "affinity": "INTEGER"
-          },
-          {
             "fieldPath": "deletedAt",
             "columnName": "deleted_at",
             "affinity": "INTEGER"
@@ -65,7 +60,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '52369bf0d007e98259a02b4200dbffa7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd791d42eaba28f8a4c517ca3b85df8ce')"
     ]
   }
 }

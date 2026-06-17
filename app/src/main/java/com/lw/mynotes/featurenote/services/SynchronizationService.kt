@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class SynchronizationService @Inject constructor(
     private val firestoreNoteRepository: FirestoreNoteRepository,
-    private val networkConnectivityService: NetworkConnectivityService,
+    private val authenticationService: AuthenticationService,
     private val scope: CoroutineScope
 ) {
     private val isDataUnsynced = MutableStateFlow(false)
@@ -23,8 +23,24 @@ class SynchronizationService @Inject constructor(
         }
     }
 
-    // All logic here
     fun sync(note: Note){
         this.save(note)
+    }
+
+    // All logic here
+    fun sync(notes: List<Note>){
+        // First approach:
+        // 1. Get firestore notes
+        // 2. Compare/Solve conflicts comparing lastUpdatedAt
+        // 3. Update local
+        // 4. Update firestore
+        val user = authenticationService.currentUser
+        scope.launch {
+            val firestoreNotes = firestoreNoteRepository.getAll(user.id)
+
+        }
+        for (note in notes){
+            this.save(note)
+        }
     }
 }

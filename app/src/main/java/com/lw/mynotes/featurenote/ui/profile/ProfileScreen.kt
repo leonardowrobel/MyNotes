@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -81,6 +82,7 @@ fun ProfileScreen(
         viewModel.clearMessage()
     }
 
+    // TODO: FIX-ME
     if(state.showDialog){
         AlertDialog(
             properties = DialogProperties(dismissOnClickOutside = false),
@@ -88,12 +90,12 @@ fun ProfileScreen(
             title = { Text("Sincronização de notas") },
             text = { Text("Deseja remover as notas locais nesse processo?") },
             confirmButton = {
-                TextButton(onClick = { viewModel.syncNotes(true) }) {
+                TextButton(onClick = { viewModel.syncNotes() }) {
                     Text("SIM".uppercase())
                 }
             },
             dismissButton = {
-                TextButton(onClick = { viewModel.syncNotes(false) }) {
+                TextButton(onClick = { viewModel.syncNotes() }) {
                     Text("NÃO".uppercase())
                 }
             }
@@ -166,6 +168,10 @@ fun ProfileScreen(
                             Text("Welcome back, " + user.displayName + ".")
                         }
                         Spacer(modifier = Modifier.size(12.dp))
+                        if(state.showSyncBtn)
+                        Button(onClick = { viewModel.syncNotes() }) {
+                            Text("SYNC")
+                        }
                     }
                 }
             }

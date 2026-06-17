@@ -7,6 +7,5 @@ data class Note(
     val content: String = "",
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
-    val lastSyncAt: Long? = null,
     val deletedAt: Long? = null
 )
