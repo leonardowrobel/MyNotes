@@ -3,10 +3,12 @@ package com.lw.mynotes.featurenote.domain.repository
 import com.lw.mynotes.featurenote.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
-interface FirestoreNoteRepository {
+interface FirestoreNotesRepository {
 
     suspend fun getAll(userId: String): Flow<List<Note>>
-//    suspend fun getAll(): List<Note>
+    // TODO: better name?
+    suspend fun getAllAsList(userId: String): List<Note>
+
 
     suspend fun get(id: String): Note?
 

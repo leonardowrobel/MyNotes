@@ -17,6 +17,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -63,13 +64,24 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             authenticationService.currentUserFlow.collect { user ->
                 if (user != null) {
-                    _user.value = user
+                    _user.tryEmit(user)
                 }
             }
         }
         viewModelScope.launch {
             networkConnectivityService.isConnected.collect { status ->
                 _isConnected.tryEmit(status)
+            }
+        }
+        viewModelScope.launch {
+            combine(_user, _isConnected){ user, isConnected ->
+                return@combine (!user.isAnonymous && isConnected)
+            }.collect { canSync ->
+                if(canSync){
+                    _uiState.update { it.copy(showSyncBtn = true) }
+                } else {
+                    _uiState.update { it.copy(showSyncBtn = false) }
+                }
             }
         }
     }
@@ -103,8 +115,6 @@ class ProfileViewModel @Inject constructor(
             if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 authenticationService.signInWithGoogle(googleIdTokenCredential.idToken)
-                _uiState.update { it.copy(showSyncBtn = true) }
-//                _uiState.update { it.copy(showDialog = true) }
             } else {
                 Log.e(TAG, "UNEXPECTED_CREDENTIAL")
             }

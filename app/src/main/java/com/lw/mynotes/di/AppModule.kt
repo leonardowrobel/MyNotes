@@ -8,9 +8,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.lw.mynotes.BuildConfig
 import com.lw.mynotes.featurenote.data.data_source.MyNotesDatabase
-import com.lw.mynotes.featurenote.data.repository.FirestoreNoteRepositoryImpl
+import com.lw.mynotes.featurenote.data.repository.FirestoreNotesRepositoryImpl
 import com.lw.mynotes.featurenote.data.repository.NotesRepositoryImpl
-import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
+import com.lw.mynotes.featurenote.domain.repository.FirestoreNotesRepository
 import com.lw.mynotes.featurenote.domain.repository.NotesRepository
 import com.lw.mynotes.featurenote.services.AuthenticationService
 import com.lw.mynotes.featurenote.services.SynchronizationService
@@ -50,7 +50,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesFirebaseNoteRepository(): FirestoreNoteRepository {
+    fun providesFirebaseNoteRepository(): FirestoreNotesRepository {
         val firestore = Firebase.firestore
         // TODO: Find out programmatically build config
         val localIp = BuildConfig.LOCAL_IP
@@ -58,7 +58,7 @@ object AppModule {
         firestore.useEmulator(localIp, localFirestorePort.toInt())
 
         val db = FirebaseFirestore.getInstance()
-        return FirestoreNoteRepositoryImpl(db)
+        return FirestoreNotesRepositoryImpl(db)
     }
 
     // Services ------------------------------------------------------------------------------------
@@ -80,11 +80,17 @@ object AppModule {
     @Provides
     @Singleton
     fun providesSynchronizationService(
-        firestoreNoteRepository: FirestoreNoteRepository,
-        networkConnectivityService: NetworkConnectivityService,
+        firestoreNotesRepository: FirestoreNotesRepository,
+        notesRepository: NotesRepository,
+        authenticationService: AuthenticationService,
         scope: CoroutineScope
     ): SynchronizationService {
-        return SynchronizationService(firestoreNoteRepository, networkConnectivityService, scope)
+        return SynchronizationService(
+            firestoreNotesRepository,
+            notesRepository,
+            authenticationService,
+            scope
+        )
     }
 
     // Other ---------------------------------------------------------------------------------------

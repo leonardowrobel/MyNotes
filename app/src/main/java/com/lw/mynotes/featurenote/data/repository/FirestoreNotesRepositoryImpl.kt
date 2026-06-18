@@ -5,21 +5,30 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.lw.mynotes.featurenote.domain.model.Note
-import com.lw.mynotes.featurenote.domain.repository.FirestoreNoteRepository
+import com.lw.mynotes.featurenote.domain.repository.FirestoreNotesRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-// FIX-ME
-// TODO: fix the Firestore Rules
-class FirestoreNoteRepositoryImpl @Inject constructor(
+class FirestoreNotesRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
-): FirestoreNoteRepository {
+): FirestoreNotesRepository {
 
     override suspend fun getAll(userId: String): Flow<List<Note>> {
         return firestore.collection(NOTES_COLLECTION)
             .whereEqualTo(USER_ID_FIELD, userId)
             .dataObjects<Note>()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun getAllAsList(userId: String): List<Note> {
+        return firestore.collection(NOTES_COLLECTION)
+            .whereEqualTo(USER_ID_FIELD, userId)
+            .dataObjects<Note>().flatMapConcat { it.asFlow() }.toList()
     }
 
     override suspend fun get(id: String): Note? {
@@ -28,7 +37,6 @@ class FirestoreNoteRepositoryImpl @Inject constructor(
             .document(id).get().await().toObject()
     }
 
-    // TODO: FIX Firestore security RULES
     override suspend fun insert(note: Note){
        Log.d(TAG, "insert()")
        firestore.collection("notes").add(note)
