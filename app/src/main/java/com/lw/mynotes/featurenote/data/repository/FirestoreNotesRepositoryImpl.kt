@@ -14,27 +14,33 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+// TODO: CREATE TESTS
 class FirestoreNotesRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ): FirestoreNotesRepository {
 
     override suspend fun getAll(userId: String): Flow<List<Note>> {
-        return firestore.collection(NOTES_COLLECTION)
+        return firestore.collection(NOTES_COLLECTION_PATH)
             .whereEqualTo(USER_ID_FIELD, userId)
             .dataObjects<Note>()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun getAllAsList(userId: String): List<Note> {
-        return firestore.collection(NOTES_COLLECTION)
+        return firestore.collection(NOTES_COLLECTION_PATH)
             .whereEqualTo(USER_ID_FIELD, userId)
-            .dataObjects<Note>().flatMapConcat { it.asFlow() }.toList()
+            .dataObjects<Note>()
+            .flatMapConcat { it.asFlow() }
+            .toList()
     }
 
     override suspend fun get(id: String): Note? {
         return firestore
-            .collection(NOTES_COLLECTION)
-            .document(id).get().await().toObject()
+            .collection(NOTES_COLLECTION_PATH)
+            .document(id)
+            .get()
+            .await()
+            .toObject()
     }
 
     override suspend fun insert(note: Note){
@@ -51,18 +57,18 @@ class FirestoreNotesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun update(note: Note) {
-        firestore.collection(NOTES_COLLECTION)
+        firestore.collection(NOTES_COLLECTION_PATH)
             .document(note.id.toString()).set(note).await()
     }
 
     override suspend fun delete(note: Note) {
-        firestore.collection(NOTES_COLLECTION)
+        firestore.collection(NOTES_COLLECTION_PATH)
             .document(note.id.toString()).delete().await()
     }
 
     companion object {
         const val TAG = "FIRESTORE_REPO"
         private const val USER_ID_FIELD = "userId"
-        private const val NOTES_COLLECTION = "notes"
+        private const val NOTES_COLLECTION_PATH = "notes"
     }
 }

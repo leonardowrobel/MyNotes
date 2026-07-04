@@ -39,23 +39,25 @@ class SynchronizationService @Inject constructor(
 
     // TODO: WIP
     // All logic here
-    fun sync(localNotes: List<Note>){
+    suspend fun sync(localNotes: List<Note>){
         Log.d(TAG, "sync(List<Note>))")
         // First approach:
         val user = authenticationService.currentUser
-        scope.launch {
+//        scope.launch {
             // 1. Get firestore notes
             lateinit var firestoreNotes: List<Note>
             lateinit var firestoreNotesMap: Map<Long, Note>
             lateinit var syncedNotes: List<Note>
-            try {
+            Log.d(TAG, "before try")
+//            try {
                 firestoreNotes = firestoreNotesRepository.getAllAsList(user.id)
-            } catch (e: FirebaseFirestoreException){
-                Log.e(TAG, "Error trying to get all as list:")
-                e.message
-            }
+//            } catch (e: FirebaseFirestoreException){
+//                Log.e(TAG, "Error trying to get all as list:")
+//                e.message
+//            }
+            Log.d(TAG, "firestoreNotes.isEmpty(): " + firestoreNotes.isEmpty())
             // 1.1 Check if there's no notes on cloud
-            if(firestoreNotes.isEmpty()){ // TODO: Check this
+            if(firestoreNotes.isNotEmpty()){ // TODO: Check this
                 firestoreNotesMap = firestoreNotes.associateBy { it.id }
                 // 2. Compare/Solve conflicts comparing lastUpdatedAt
                 syncedNotes = localNotes.map { note ->
@@ -81,7 +83,7 @@ class SynchronizationService @Inject constructor(
                 }
             }
 
-        }
+//        }
     }
 
     companion object {
